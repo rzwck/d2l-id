@@ -2,7 +2,7 @@
   <img src="https://raw.githubusercontent.com/d2l-ai/d2l-en/master/static/logo-with-text.png" width="350">
 </div>
 
-# D2L.ai: Buku interaktif *Deep Learning* Interactive dengan kode aneka *framework*, matematika dan diskusi
+# D2L.ai: Buku interaktif *Deep Learning* dengan kode aneka *framework*, matematika dan diskusi
 
 [![Build Status](http://ci.d2l.ai/job/d2l-en/job/master/badge/icon)](http://ci.d2l.ai/job/d2l-en/job/master/)
 
@@ -82,8 +82,6 @@ Jika menurut Anda buku ini bermanfaat, beri bintang (★) untuk repositori ini a
 > <b>&mdash; Bernhard Schölkopf, Director, Max Planck Institute for Intelligent Systems</b>
 
 ## Berkontribusi ([Pelajari Caranya](https://d2l.ai/chapter_appendix-tools-for-deep-learning/contributing.html))
-
-Buku sumber terbuka ini telah 
 
 Buku sumber terbuka ini mendapatkan keuntungan dari saran pedagogis, koreksi kesalahan ketik, dan perbaikan lainnya dari kontributor komunitas. Bantuan Anda sangat berharga untuk menjadikan buku ini lebih baik bagi semua orang.
 
