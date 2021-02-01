@@ -69,16 +69,15 @@ Jika menurut Anda buku ini bermanfaat, beri bintang (★) untuk repositori ini a
 }
 ```
 
-
 ## Dukungan
 
-> <p>"Dalam waktu kurang dari satu dekade, revolusi AI telah menyapu dari laboratorium riset ke banyak industri dan ke setiap sudut kehidupan kita sehari-hari. *Dive into Deep Learning* adalah teks yang sangat bagus tentang *deep learning* dan layak mendapat perhatian dari siapa saja yang ingin mempelajari mengapa *deep learning* memicu revolusi AI: kekuatan teknologi paling kuat di zaman kita. "</p>
+> <p>"Dalam waktu kurang dari satu dekade, revolusi AI telah menyapu dari laboratorium riset ke banyak industri dan ke setiap sudut kehidupan kita sehari-hari. <i>Dive into Deep Learning</i> adalah teks yang sangat bagus tentang <i>deep learning</i> dan layak mendapat perhatian dari siapa saja yang ingin mempelajari mengapa <i>deep learning</i> memicu revolusi AI: kekuatan teknologi paling kuat di zaman kita. "</p>
 > <b>&mdash; Jensen Huang, Founder and CEO, NVIDIA</b>
 
-> <p>"Ini adalah buku yang tepat waktu dan menarik, menyediakan tidak hanya gambaran umum yang komprehensif tentang prinsip-prinsip *deep learning* tetapi juga detail algoritma dengan kode pemrograman, dan terlebih lagi, pengantar mutakhir untuk *deep learning* dalam *computer vision* dan *natural language processing*. Selami buku ini jika Anda ingin mendalami *deep learning*!"</p>
+> <p>"Ini adalah buku yang tepat waktu dan menarik, menyediakan tidak hanya gambaran umum yang komprehensif tentang prinsip-prinsip <i>deep learning</i> tetapi juga detail algoritma dengan kode pemrograman, dan terlebih lagi, pengantar mutakhir untuk <i>deep learning</i> dalam <i>computer vision</i> dan <i>natural language processing</i>. Selami buku ini jika Anda ingin mendalami <i>deep learning</i>!"</p>
 > <b>&mdash; Jiawei Han, Michael Aiken Chair Professor, University of Illinois at Urbana-Champaign</b>
 
-> <p>"Ini adalah tambahan yang sangat disambut baik untuk literatur *machine learning*, dengan fokus pada pengalaman langsung melalui notebook Jupyter. Siswa *deep learning* akan menganggap ini sangat berharga untuk menjadi mahir di bidang ini."</p>
+> <p>"Ini adalah tambahan yang sangat disambut baik untuk literatur <i>machine learning</i>, dengan fokus pada pengalaman langsung melalui notebook Jupyter. Siswa <i>deep learning</i> akan menganggap ini sangat berharga untuk menjadi mahir di bidang ini."</p>
 > <b>&mdash; Bernhard Schölkopf, Director, Max Planck Institute for Intelligent Systems</b>
 
 ## Berkontribusi ([Pelajari Caranya](https://d2l.ai/chapter_appendix-tools-for-deep-learning/contributing.html))
