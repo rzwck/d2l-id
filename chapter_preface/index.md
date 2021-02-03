@@ -14,7 +14,6 @@ sebagai area yang sepenuhnya terpisah di mana *machine learning* merupakan salah
 Pada saat itu, *neural network*, pendahulu dari model *deep learning*
 yang kami fokuskan di buku ini, dianggap sebagai alat yang ketinggalan zaman.
 
-
 Hanya dalam lima tahun terakhir, *deep learning* telah mengejutkan dunia,
 mendorong kemajuan pesat dalam berbagai bidang seperti visi komputer,
 pemrosesan bahasa alami, pengenalan ucapan otomatis,
@@ -125,7 +124,7 @@ menggunakan alur kerja terintegrasi seperti ini.
 ### Belajar dengan Berbuat
 
 Banyak buku teks mengajarkan serangkaian topik, masing-masing dengan detail yang lengkap.
-Misalnya, buku teks Chris Bishop yang sangat bagus: cite:`Bishop.2006`,
+Misalnya, buku teks Chris Bishop yang sangat bagus :cite:`Bishop.2006`,
 mengajarkan setiap topik dengan sangat detail, sehingga membacanya sampai ke bab
 pada regresi linier pun membutuhkan usaha yang tidak sedikit.
 Walaupun para ahli menyukai buku ini karena kedetailannya,
@@ -188,7 +187,7 @@ kami akan membekali Anda dengan prasyarat dasar yang diperlukan
 untuk mempraktikkan *deep learning*, seperti cara menyimpan dan memanipulasi data,
 dan bagaimana menerapkan berbagai operasi numerik berdasarkan konsep dasar
 dari aljabar linier, kalkulus, dan probabilitas.
-: numref: `chap_linear` dan: numref:` chap_perceptrons`
+:numref:`chap_linear` dan :numref:`chap_perceptrons`
 mencakup konsep dan teknik paling dasar dari *deep learning*,
 seperti regresi linier, perceptron multi lapis dan regularisasi.
 
@@ -243,7 +242,7 @@ Terkadang, untuk menghindari pengulangan yang tidak perlu, kami merangkum
 fungsi yang sering diimpor dan dirujuk, kelas dalam buku ini di paket `d2l`.
 Untuk blok apa pun seperti fungsi, kelas, atau beberapa *import*
 yang akan disimpan dalam paket tersebut, kami akan menandainya dengan
-`#@save`. Kami menawarkan ikhtisar mendetail dari fungsi dan kelas ini di: numref: `sec_d2l`.
+`#@save`. Kami menawarkan ikhtisar mendetail dari fungsi dan kelas ini di :numref:`sec_d2l`.
 Paket `d2l` ringan dan hanya membutuhkan
 paket dan modul berikut sebagai dependensi:
 
@@ -283,7 +282,7 @@ silakan lihat :ref:`chap_installation`
 untuk memutakhirkan kode dan *runtime environment* Anda.
 
 Berikut adalah cara kami mengimpor modul dari MXNet.
-: end_tab:
+:end_tab:
 
 :begin_tab:`pytorch`
 Sebagian besar kode dalam buku ini didasarkan pada PyTorch.
