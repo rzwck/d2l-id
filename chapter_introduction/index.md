@@ -709,4 +709,94 @@ hingga setiap artikel memiliki tinjauan manual yang tepat.
 Memang, selama beberapa tahun, organisasi *BioASQ*
 telah [menyelenggarakan kompetisi](http://bioasq.org/) untuk melakukan hal ini dengan tepat.
 
+#### Pencarian 
+
+Terkadang kita tidak hanya ingin menetapkan setiap contoh ke sebuah keranjang
+atau ke angka riel. Di bidang pencarian informasi,
+kita ingin menerapkan pemeringkatan pada suatu kumpulan objek.
+Ambil contoh penelusuran web.
+Tujuannya bukan untuk menentukan apakah
+halaman tertentu relevan untuk suatu kueri, tetapi,
+halaman mana di antara hasil pencarian yang sangat banyak, 
+yang paling relevan
+untuk seorang pengguna tertentu.
+Kita sangat memperhatikan urutan hasil pencarian yang relevan
+dan algoritma pembelajaran kita perlu menghasilkan sub himpunan yang terurut 
+dari himpunan yang lebih besar.
+Dengan kata lain, jika kita diminta untuk menghasilkan 5 huruf pertama dari alfabet, ada perbedaan
+antara mengembalikan "A B C D E" dan "C A B E D".
+Meskipun hasil setnya sama,
+urutan objek di dalamnya penting.
+
+Salah satu solusi yang mungkin untuk masalah ini adalah pertama menetapkan 
+untuk setiap elemen dalam himpunan suatu skor relevansi yang sesuai
+dan kemudian untuk mengambil elemen peringkat teratas.
+[PageRank](https://en.wikipedia.org/wiki/PageRank),
+saus rahasia orisinil di balik mesin pencari Google
+adalah contoh awal dari sistem penilaian seperti itu yang 
+tidak biasa karena tidak bergantung pada kueri yang sebenarnya.
+Di sini, cara ini mengandalkan filter relevansi sederhana
+untuk mengidentifikasi kumpulan item yang relevan
+dan kemudian menggunakan PageRank untuk mengurutkan hasil 
+yang mengandung kueri.
+Saat ini, mesin pencari menggunakan pembelajaran mesin dan model perilaku
+untuk mendapatkan skor relevansi yang bergantung pada kueri.
+Ada banyak konferensi akademik yang seluruhnya ditujukan untuk subjek ini.
+
+#### Sistem Pemberi Rekomendasi
+:label:`subsec_recommender_systems`
+
+Sistem pemberi rekomendasi adalah masalah lainnya
+yang terkait dengan penelusuran dan pemeringkatan.
+Masalah ini memiliki kemiripan tujuan, yaitu menampilkan sekumpulan item yang relevan kepada pengguna.
+Perbedaan utamanya adalah penekanannya pada *personalisasi*
+kepada pengguna tertentu dalam konteks sistem pemberi rekomendasi.
+Misalnya, untuk rekomendasi film,
+halaman hasil untuk penggemar fiksi ilmiah
+dan halaman hasil
+bagi penikmat komedi *Peter Sellers* mungkin sangat berbeda.
+Masalah serupa muncul di pengaturan rekomendasi lainnya,
+mis., untuk produk ritel, musik, dan rekomendasi berita.
+
+Dalam beberapa kasus, pelanggan memberikan umpan balik secara eksplisit untuk melaporkan 
+seberapa besar mereka menyukai produk tertentu
+(misalnya, peringkat dan ulasan produk di Amazon, IMDb, dan GoodReads).
+Dalam beberapa kasus lain, mereka memberikan umpan balik implisit,
+mis., dengan mengabaikan judul-judul lagu tertentu pada daftar putar,
+yang mungkin menunjukkan ketidaksukaan tetapi mungkin juga hanya menunjukkan
+bahwa lagu tersebut tidak sesuai konteksnya.
+Dalam formulasi paling sederhana, sistem ini dilatih
+untuk memperkirakan beberapa skor,
+seperti perkiraan peringkat
+atau kemungkinan terjadinya pembelian 
+berdasarkan pengguna dan barang.
+
+Dengan model seperti itu,
+untuk seorang pengguna,
+kita dapat mengambil kumpulan objek dengan skor terbesar,
+yang kemudian dapat direkomendasikan kepada pengguna tersebut.
+Sistem produksi jauh lebih maju dan cepat
+dalam merekam aktivitas pengguna secara rinci dan karakteristik barang ke dalam akun
+saat menghitung skor tersebut. :numref:`fig_deeplearning_amazon` adalah sebuah contoh
+buku *deep learning* yang direkomendasikan oleh Amazon berdasarkan algoritma personalisasi yang disesuaikan untuk menangkap preferensi seseorang.
+
+Meskipun memiliki nilai ekonomi yang luar biasa,
+sistem rekomendasi yang 
+dibangun secara naif di atas model prediktif
+menderita beberapa kekurangan konseptual yang serius.
+Untuk memulai, kita hanya mengamati *umpan balik yang disensor*:
+pengguna biasanya hanya akan memberi penilaian pada film yang mereka memiliki perasaan kuat tentangnya.
+Sebagai contoh,
+dalam skala lima poin,
+Anda mungkin memperhatikan bahwa suatu barang menerima banyak peringkat lima dan satu bintang
+tetapi hanya ada sedikit peringkat bintang tiga yang mencolok.
+Selain itu, kebiasaan membeli saat ini sering kali terjadi
+akibat dari efek algoritma rekomendasi yang saat ini diterapkan,
+tetapi algoritma pembelajaran tidak selalu memperhitungkan detail ini.
+Dengan demikian, dapat terbentuk siklus umpan balik 
+di mana sistem pemberi rekomendasi mendorong barang
+yang kemudian dianggap lebih baik (karena pembelian lebih banyak)
+dan hal ini mendorong barang ini menjadi lebih sering lagi direkomendasikan.
+Banyak dari masalah tentang cara menangani penyensoran,
+insentif, dan siklus umpan balik, adalah pertanyaan penelitian terbuka yang penting.
 
