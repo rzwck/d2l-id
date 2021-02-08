@@ -780,6 +780,9 @@ dalam merekam aktivitas pengguna secara rinci dan karakteristik barang ke dalam 
 saat menghitung skor tersebut. :numref:`fig_deeplearning_amazon` adalah sebuah contoh
 buku *deep learning* yang direkomendasikan oleh Amazon berdasarkan algoritma personalisasi yang disesuaikan untuk menangkap preferensi seseorang.
 
+![Deep learning books recommended by Amazon.](../img/deeplearning-amazon.jpg)
+:label:`fig_deeplearning_amazon`
+
 Meskipun memiliki nilai ekonomi yang luar biasa,
 sistem rekomendasi yang 
 dibangun secara naif di atas model prediktif
