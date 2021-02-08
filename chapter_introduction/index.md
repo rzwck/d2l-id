@@ -290,3 +290,423 @@ memasukkan dan mengotomatiskan ketidakadilan historis.
 Perhatikan bahwa ini semua dapat terjadi tanpa sang ilmuwan data secara aktif 
 berniat melakukan itu, atau bahkan tanpa disadarinya.
 
+### Model
+
+Sebagian besar *machine learning* melibatkan suatu transformasi data dalam arti tertentu.
+Kita mungkin ingin membangun sistem yang menerima input foto dan memprediksi kadar senyuman.
+Dalam hal lain, kita mungkin ingin menrima input satu set pembacaan sensor
+dan memprediksi seberapa normal vs anomali pembacaan tersebut.
+Dengan menyebut model, yang kami maksudkan adalah mesin komputasi untuk menyerap data
+dari satu jenis,
+dan mengeluarkan prediksi dari jenis yang mungkin berbeda.
+Secara khusus, kita tertarik pada model statistik
+yang dapat diperkirakan dari data.
+Walaupun model sederhana sangat mampu menangani
+masalah yang cukup sederhana,
+masalah
+yang kami fokuskan dalam buku ini di luar kapasitas metode klasik.
+*Deep learning* dibedakan dari pendekatan klasik
+terutama oleh serangkaian model yang kuat yang menjadi fokusnya.
+Model ini terdiri dari banyak transformasi data yang berurutan
+yang dirangkai dari atas ke bawah, itulah kenapa dinamakan *deep learning*.
+Dalam perjalanan kita untuk mendiskusikan *deep model*,
+kami juga akan membahas beberapa metode tradisional.
+
+### Fungsi Objektif
+
+Di awal, kami memperkenalkan *machine learning* sebagai pembelajaran dari pengalaman.
+Dengan menyebut *learning* di sini, yang kami maksud adalah meningkatkan beberapa tugas seiring waktu.
+Tetapi siapa yang bisa mengatakan bahwa itu adalah kemajuan atau perbaikan?
+Anda mungkin membayangkan bahwa kita dapat mengusulkan untuk memperbarui model kita,
+dan beberapa orang mungkin tidak setuju bahwa usulan perbaruan itu adalah kemajuan atau kemunduran.
+
+Untuk mengembangkan sistem matematika formal dari mesin pembelajaran,
+kita perlu memiliki ukuran formal tentang seberapa baik (atau buruk) model kita.
+Dalam pembelajaran mesin, dan pengoptimalan secara umum,
+kami menyebutnya *fungsi objektif*.
+Secara konvensi, kami biasanya mendefinisikan fungsi objektif sehingga nilai yang lebih rendah adalah lebih baik.
+Ini hanyalah konvensi.
+Anda dapat mengambil fungsi apa pun
+yang nilainya lebih tinggi adalah yang lebih baik, dan mengubahnya menjadi fungsi baru
+yang identik secara kualitatif tetapi nilai yang lebih rendah adalah lebih baik
+dengan cara membalik tanda positif dan negatifnya.
+Karena lebih rendah lebih baik, fungsi-fungsi ini terkadang disebut
+*fungsi kerugian*.
+
+Saat mencoba memprediksi nilai numerik,
+fungsi kerugian yang paling umum adalah *kesalahan kuadrat*,
+yaitu, kuadrat dari perbedaan antara prediksi dan nilai yang sebenarnya.
+Untuk klasifikasi, fungsi objektif paling umum adalah meminimalkan tingkat kesalahan,
+yaitu, bagian dari contoh yang
+prediksinya tidak sesuai dengan nilai sebenarnya.
+Beberapa objektif (misalnya, kesalahan kuadrat) mudah untuk dioptimalkan.
+Lainnya (misalnya, tingkat kesalahan) sulit untuk dioptimalkan secara langsung,
+karena tidak dapat dibedakan atau komplikasi lainnya.
+Dalam kasus ini, biasanya mengoptimalkan fungsi objektif *surrogate*.
+
+Biasanya, fungsi kerugian ditentukan
+sehubungan dengan parameter model
+dan bergantung pada *dataset*.
+Kita belajar
+nilai terbaik dari parameter model kita
+dengan meminimalkan kerugian yang terjadi pada satu set
+terdiri dari sejumlah contoh yang dikumpulkan untuk pelatihan.
+Namun, melakukannya dengan baik pada data pelatihan
+tidak menjamin bahwa model kita akan bekerja dengan baik pada data yang baru.
+Jadi kita biasanya ingin membagi data yang tersedia menjadi dua partisi:
+*dataset* pelatihan (atau *set* pelatihan, untuk menyesuaikan parameter model)
+dan *dataset* pengujian (atau *set* pengujian, yang diadakan untuk evaluasi),
+dan kita akan menghitung kinerja model pada keduanya.
+Anda bisa membayangkan performa latihan seperti itu
+nilai siswa pada latihan ujian 
+digunakan untuk mempersiapkan beberapa ujian akhir yang sebenarnya.
+Meskipun hasil latihan ujian bagus,
+itu tidak menjamin kesuksesan pada ujian akhir.
+Dengan kata lain,
+kinerja tes dapat menyimpang secara signifikan dari kinerja pelatihan.
+Saat model berperforma baik di set pelatihan
+tetapi gagal menggeneralisasi ke data yang baru,
+kita mengatakan itu sebagai *overfitting*.
+Dalam istilah kehidupan nyata, ini seperti gagal dalam ujian yang sebenarnya
+meski mengerjakan latihan ujian dengan baik.
+
+### Algoritma Optimasi
+
+Setelah kita mendapatkan beberapa sumber data dan representasi,
+model, dan fungsi objektif yang terdefinisi dengan baik,
+kita membutuhkan algoritma yang mampu melakukan pencarian
+untuk mendapatkan parameter terbaik untuk meminimalkan fungsi kerugian.
+Algoritma optimasi populer untuk *deep learning*
+didasarkan pada pendekatan yang disebut *gradient descent*.
+Singkatnya, di setiap langkah, metode ini
+akan mencari, untuk setiap parameter,
+ke arah mana kerugian set pelatihan akan bergerak
+jika Anda mengubah parameter itu sedikit saja.
+Kemudian dia akan memperbarui
+parameter ke arah yang dapat mengurangi kerugian.
+
+## Jenis Masalah *Machine Learning*
+
+Masalah kata panggilan dalam contoh motivasi di awal 
+hanyalah satu di antara
+banyak masalah yang dapat ditangani oleh *machine learning*.
+Untuk memotivasi pembaca lebih lanjut
+dan memberi kita beberapa bahasa umum saat kita membicarakan lebih banyak masalah di seluruh buku,
+berikut kami
+buat daftar contoh masalah *machine learning*.
+Kami akan terus merujuk
+konsep kami yang disebutkan di atas
+seperti data, model, dan teknik pelatihan.
+
+### Pembelajaran Terbimbing *Supervised Learning*
+
+*Pembelajaran terbimbing* membahas tugas
+memprediksi label dari masukan berupa fitur.
+Setiap pasangan fitur - label disebut sebagai contoh.
+Terkadang, jika konteksnya jelas, kami mungkin menggunakan istilah *contoh*
+untuk merujuk pada kumpulan masukan,
+bahkan ketika label terkait tidak diketahui.
+Tujuan kita adalah menghasilkan model
+yang memetakan input apa pun ke prediksi label.
+
+Untuk mendasari deskripsi ini dalam contoh konkret,
+jika kita bekerja di bidang kesehatan,
+maka kita mungkin ingin memprediksi apakah atau tidak
+seorang pasien akan mengalami serangan jantung.
+Pengamatan ini, "serangan jantung" atau "tidak ada serangan jantung",
+akan menjadi label kita.
+Fitur masukan mungkin merupakan tanda vital
+seperti detak jantung, tekanan darah diastolik,
+dan tekanan darah sistolik.
+
+Pengawasan berperan karena untuk memilih parameter, kita (sebagai pengawas) menyediakan model dengan *dataset*
+terdiri dari contoh berlabel,
+di mana setiap contoh dicocokkan dengan label yang benar.
+Dalam istilah probabilistik, kami biasanya tertarik untuk memperkirakan
+probabilitas bersyarat dari label yang diberi fitur masukan.
+Meskipun ini hanyalah salah satu dari beberapa paradigma dalam pembelajaran mesin,
+pembelajaran yang diawasi termasuk sebagai mayoritas dalam hal kesuksesan penerapan pembelajaran mesin di industri.
+Sebagian karena banyak tugas penting
+dapat digambarkan secara jelas sebagai memperkirakan probabilitas
+dari sesuatu yang tidak diketahui berdasarkan kumpulan data tertentu yang tersedia:
+
+* Memprediksi kanker vs. bukan kanker berdasarkan masukan gambar tomografi komputer.
+* Memprediksi terjemahan yang benar dalam bahasa Prancis berdasarkan masukan kalimat dalam bahasa Inggris.
+* Memprediksi harga suatu saham bulan depan berdasarkan data pelaporan keuangan bulan ini.
+
+Bahkan dengan deskripsi yang sederhana
+"memprediksi label berdasarkan fitur masukan"
+pembelajaran yang diawasi dapat berupa banyak bentuk
+dan membutuhkan banyak keputusan pemodelan,
+tergantung pada (di antara pertimbangan lain) jenis, ukuran,
+dan jumlah input dan output.
+Misalnya, kita menggunakan model yang berbeda untuk memproses urutan masukan dengan panjang bervariasi 
+dan untuk memproses representasi vektor dengan panjang tetap.
+Kita akan membahas banyak dari masalah ini secara mendalam
+sepanjang buku ini.
+
+Secara informal, proses pembelajaran terlihat seperti berikut ini.
+Pertama, ambil banyak koleksi contoh yang fitur-fiturnya diketahui
+dan pilih sebagian di antaranya secara acak,
+dapatkan label yang sebenarnya untuk masing-masing contoh tersebut.
+Terkadang label ini mungkin data yang telah dikumpulkan
+(misalnya, apakah pasien meninggal dalam tahun berikutnya?)
+dan di lain waktu kita mungkin perlu menggunakan usaha manusia untuk memberi label pada data,
+(mis., menetapkan gambar ke kategori).
+Bersama-sama, masukan dan label yang sesuai membentuk suatu set pelatihan.
+Kita kemudian memasukkan set data pelatihan ke dalam algoritma pembelajaran yang diawasi,
+sebuah fungsi yang mengambil masukan dari sebuah dataset
+dan menghasilkan fungsi lain: yaitu model yang dipelajari dari data.
+Akhirnya, kita dapat memasukkan masukan yang sebelumnya tidak pernah dilihat ke model yang dipelajari,
+menggunakan keluarannya sebagai prediksi dari label yang sesuai.
+Proses lengkapnya diambil dalam :numref:`fig_supervised_learning`.
+
+#### Regresi
+
+Mungkin tugas belajar terbimbing yang paling sederhana
+dan mudah untuk dipahami *regresi*.
+Pertimbangkan, misalnya, sekumpulan data yang diambil
+dari basis data penjualan rumah.
+Kita mungkin membuat tabel,
+di mana setiap baris sesuai dengan rumah yang berbeda,
+dan setiap kolom sesuai dengan beberapa atribut yang relevan,
+seperti ukuran luas sebuah rumah,
+jumlah kamar tidur, jumlah kamar mandi, dan jumlah menit (berjalan kaki) ke pusat kota.
+Dalam kumpulan data ini, setiap contoh adalah suatu rumah tertentu,
+dan vektor fitur yang sesuai akan menjadi satu baris dalam tabel.
+Jika Anda tinggal di New York atau San Francisco,
+dan Anda bukan CEO Amazon, Google, Microsoft, atau Facebook,
+(luas, jumlah kamar tidur, jumlah kamar mandi, jarak berjalan kaki)
+vektor fitur untuk rumah Anda mungkin terlihat seperti ini: $[600, 1, 1, 60]$.
+Namun, jika Anda tinggal di Pittsburgh, mungkin terlihat seperti $[3000, 4, 3, 10]$.
+Vektor fitur seperti ini sangat penting
+untuk sebagian besar algoritma pembelajaran mesin klasik.
+
+Apa yang membuat suatu masalah menjadi tergolong masalah regresi sebenarnya adalah keluarannya.
+Katakanlah Anda sedang mencari rumah baru.
+Anda mungkin ingin memperkirakan nilai pasar wajar sebuah rumah,
+berdasarkan masukan beberapa fitur seperti di atas.
+Label, harga jual, adalah nilai numerik.
+Ketika label mengambil nilai numerik bebas,
+kita menyebutnya sebagai masalah *regresi*.
+Tujuan kita adalah menghasilkan model yang prediksinya 
+mendekati nilai label sebenarnya.
+
+Banyak masalah praktis merupakan masalah regresi yang dijelaskan dengan baik.
+Memprediksi rating yang akan diberikan pengguna untuk sebuah film
+dapat dianggap sebagai masalah regresi
+dan jika Anda merancang algoritma hebat untuk mencapai prestasi ini di tahun 2009,
+Anda mungkin telah memenangkan [hadiah Netflix senilai 1 juta dolar](https://en.wikipedia.org/wiki/Netflix_Prize).
+Memprediksi lamanya pasien dirawat di rumah sakit
+juga merupakan masalah regresi.
+Aturan praktis yang baik untuk mengenali regresi adalah masalah yang menjawab *berapa?* sebaiknya menggunakan regresi,
+seperti:
+
+* Berapa jam operasi ini berlangsung?
+* Berapa curah hujan yang akan terjadi di kota ini dalam enam jam ke depan?
+
+Meskipun mungkin Anda belum pernah menggunakan pembelajaran mesin sebelumnya,
+Anda mungkin telah menyelesaikan masalah regresi secara informal.
+Bayangkan, misalnya, saluran air Anda diperbaiki
+dan kontraktor Anda menghabiskan waktu 3 jam
+menghilangkan kotoran dari pipa limbah Anda.
+Kemudian dia mengirimi Anda tagihan sebesar 350 dolar.
+Sekarang bayangkan teman Anda menyewa kontraktor yang sama selama 2 jam
+dan bahwa dia menerima tagihan 250 dolar.
+Jika seseorang kemudian bertanya kepada Anda berapa banyak tagihan 
+untuk penghapusan kotoran mereka yang akan datang
+Anda mungkin membuat beberapa asumsi yang masuk akal,
+seperti lebih banyak jam kerja membutuhkan lebih banyak dolar.
+Anda mungkin juga berasumsi bahwa ada beberapa tagihan dasar
+dan kemudian kontraktor menagih per jam di luar itu.
+Jika asumsi ini benar, maka jika diberikan dua contoh data ini,
+Anda sudah dapat mengidentifikasi struktur harga kontraktor:
+100 dolar per jam ditambah 50 dolar untuk muncul di rumah Anda.
+Jika Anda mengerti sampai di sini maka Anda sudah mengerti
+ide garis besar di balik regresi linier.
+
+Dalam hal ini, kita dapat menghitung parameter model 
+yang sama persis dengan harga kontraktor.
+Terkadang hal ini tidak memungkinkan,
+mis., jika beberapa dari
+variansnya disebabkan oleh beberapa faktor
+selain kedua fitur Anda.
+Dalam kasus ini, kami akan mencoba mempelajari model
+yang meminimalkan jarak antara prediksi kita dan nilai yang diamati.
+Di sebagian besar bab, kita akan fokus pada
+meminimalkan fungsi kerugian kesalahan kuadrat.
+Seperti yang akan kita lihat nanti, kerugian ini sesuai dengan asumsi
+bahwa data telah dirusak dengan gangguan Gaussian.
+
+#### Klasifikasi
+
+Meskipun model regresi bagus untuk menjawab pertanyaan *berapa?*,
+banyak masalah yang tidak cocok dengan pola ini.
+Sebagai contoh,
+bank ingin menambahkan pemindaian cek ke aplikasi selulernya.
+Ini akan melibatkan pelanggan yang mengambil foto cek
+dengan kamera ponsel pintar mereka
+dan aplikasi tersebut harus mampu
+untuk secara otomatis memahami teks yang terlihat pada gambar.
+Secara khusus,
+aplikasi itu juga harus bisa memahami teks tulisan tangan agar lebih aman,
+seperti memetakan karakter tulisan tangan
+ke salah satu karakter yang dikenal.
+Jenis masalah *yang mana?* ini disebut *klasifikasi*.
+Masalah ini diselesaikan dengan sekumpulan algoritma yang berbeda
+daripada yang digunakan untuk regresi meskipun banyak teknik akan sama. 
+
+Dalam *klasifikasi*, kita ingin model kita melihat fitur,
+mis., nilai piksel dalam gambar,
+dan kemudian memprediksi *kategori* mana (secara formal disebut *kelas*),
+Di antara beberapa pilihan yang berbeda, ada contohnya.
+Untuk angka tulisan tangan, kita mungkin memiliki sepuluh kelas,
+sesuai dengan angka 0 sampai 9.
+Bentuk klasifikasi yang paling sederhana adalah jika hanya ada dua kelas,
+masalah yang kami sebut *klasifikasi biner*.
+Misalnya, kumpulan data kami dapat terdiri dari gambar hewan
+dan label kita mungkin kelas $\mathrm{\{kucing, anjing\}}$.
+Saat dalam regresi, kita mencari regressor untuk menghasilkan nilai numerik,
+dalam klasifikasi, kami mencari pengklasifikasi, yang keluarannya adalah kelas yang diprediksi.
+
+Untuk alasan yang akan kita bahas nanti di bagian yang lebih teknis,
+mungkin sulit untuk mengoptimalkan model yang hanya dapat menghasilkan
+tugas pengklasifikasian kategoris keras,
+mis., "kucing" atau "anjing".
+Dalam kasus ini, biasanya lebih mudah untuk diungkapkan
+model kita dalam bahasa probabilitas.
+Diberikan fitur contoh,
+model kita memberikan probabilitas
+untuk setiap kelas yang memungkinkan.
+Kembali ke contoh klasifikasi hewan kita
+dengan kelas $\mathrm{\{kucing, anjing\}}$,
+pengklasifikasi mungkin melihat gambar dan mengeluarkan probabilitas
+bahwa gambar kucing sebagai 0,9.
+Kita dapat menafsirkan angka ini dengan mengatakan bahwa pengklasifikasi
+90\% yakin bahwa gambar tersebut menggambarkan seekor kucing.
+Besarnya probabilitas untuk kelas yang diprediksi
+menyampaikan satu konsep tentang ketidakpastian.
+Ini bukan satu-satunya konsep tentang ketidakpastian
+dan kita akan membahas konsep lain di bab-bab mendatang.
+
+Jika kita memiliki lebih dari dua kelas yang memungkinkan,
+kita menyebutnya sebagai masalah *klasifikasi multikelas*.
+Contoh umum termasuk pengenalan karakter tulisan tangan
+$\mathrm{\{0, 1, 2, ... 9, a, b, c, ...\}}$.
+Sementara kita menyelesaikan masalah regresi dengan mencoba
+untuk meminimalkan fungsi kerugian kesalahan kuadrat,
+fungsi kerugian umum untuk masalah klasifikasi disebut *entropi-silang*,
+yang namanya akan dijelaskan
+melalui pengantar teori informasi di bab-bab selanjutnya.
+
+Perhatikan bahwa kelas yang paling mungkin belum tentu menjadi 
+salah satu yang akan Anda gunakan dalam keputusan Anda.
+Bayangkan bahwa Anda menemukan jamur yang indah di halaman belakang rumah Anda
+seperti yang ditunjukkan di :numref:`fig_death_cap`.
+
+![Death cap---jangan dimakan!](../img/death-cap.jpg)
+:width:`200px`
+:label:`fig_death_cap`
+
+Sekarang, asumsikan bahwa Anda membuat pengklasifikasi dan melatihnya
+untuk memprediksi apakah suatu jamur beracun berdasarkan foto.
+Katakanlah pengklasifikasi pendeteksi racun kita menghasilkan keluaran 
+bahwa kemungkinan foto 
+:numref:`fig_death_cap` mengandung jamur *death cap* sebesar 0.2.
+Dengan kata lain, pengklasifikasi 80\% yakin
+bahwa jamur kita bukanlah jamur *death cap*.
+Meskipun begitu tetap saja, hanya orang bodoh yang akan memakannya.
+Hal itu karena manfaat pasti dari makan malam yang enak
+tidak sebanding dengan risiko 20% mati karenanya.
+Dengan kata lain, risiko efek dari ketidakpastian jauh
+melebihi manfaatnya.
+Jadi, kita perlu menghitung risiko yang diharapkan yang kita tanggung sebagai fungsi kerugian,
+yaitu, kita perlu mengalikan probabilitas hasilnya
+dengan manfaat (atau bahaya) yang terkait dengannya.
+Pada kasus ini,
+kerugian yang timbul karena memakan jamur
+adalah $0.2 \times \infty + 0.8 \times 0 = \infty$,
+padahal kerugian membuangnya
+$0.2 \times 0 + 0.8 \times 1 = 0.8$.
+Kekhawatiran kita ternyata benar:
+seperti yang dikatakan ahli mikologi mana pun kepada kami,
+jamur di :numref:`fig_death_cap` sebenarnya
+adalah benar jamur *death cap*.
+
+Klasifikasi bisa menjadi jauh lebih rumit dari sekedar
+klasifikasi biner, multikelas, atau bahkan multi-label.
+Misalnya, ada beberapa varian klasifikasi
+untuk menangani hierarki.
+Hierarki mengasumsikan bahwa terdapat beberapa hubungan di antara beberapa kelas.
+Jadi tidak semua kesalahan bernilai sama --- jika kita terpaksa harus salah, kita lebih suka
+untuk salah mengklasifikasikan ke kelas yang masih berhubungan daripada ke kelas yang jauh.
+Biasanya, ini disebut sebagai *klasifikasi hierarkis*.
+Salah satu contoh awal adalah [Linnaeus](https://en.wikipedia.org/wiki/Carl_Linnaeus), yang mengatur hewan dalam hierarki.
+
+Dalam kasus klasifikasi hewan,
+mungkin tidak terlalu buruk untuk salah mengira pudel (jenis anjing) sebagai *schnauzer* (jenis anjing lain),
+tetapi model kita akan membayar hukuman yang besar
+jika salah memprediksi anjing pudel sebagai dinosaurus.
+Hierarki mana yang relevan mungkin bergantung
+tentang bagaimana Anda berencana menggunakan model tersebut.
+Misalnya ular berbisa dan ular *garter*
+mungkin memang dekat dalam hubungan filogenetik,
+tapi salah mengira ular derik sebagai garter bisa mematikan.
+
+#### Pemberian Tag
+
+Beberapa masalah klasifikasi sangat cocok 
+ke dalam konfigurasi klasifikasi biner atau multikelas.
+Misalnya, kita bisa melatih pengklasifikasi biner normal
+untuk membedakan kucing dari anjing.
+Mengingat kemajuan visi komputer saat ini,
+kita dapat melakukannya dengan mudah, dengan alat siap pakai.
+Meskipun demikian, tidak peduli seberapa akurat model kita,
+kita mungkin menemukan diri kita dalam masalah saat pengklasifikasi
+menemukan gambar *Town Musicians of Bremen*,
+dongeng Jerman populer yang menampilkan empat hewan
+di :numref:`fig_stackedanimals`.
+
+
+![Keledai, anjing, kucing, dan ayam jantan.](../img/stackedanimals.png)
+:width:`300px`
+:label:`fig_stackedanimals`
+
+Seperti yang Anda lihat, ada kucing di :numref:`fig_stackedanimals`,
+dan ayam jantan, anjing, dan keledai,
+dengan beberapa pohon di latar belakang.
+Tergantung apa yang ingin kita lakukan dengan model kita
+akhirnya, memperlakukan ini sebagai masalah klasifikasi biner
+mungkin tidak masuk akal.
+Sebagai gantinya, kita mungkin ingin memberi model opsi
+untuk bisa mengatakan gambar itu menggambarkan seekor kucing, seekor anjing, seekor keledai,
+*dan* ayam jantan.
+
+Masalah belajar memprediksi kelas yang 
+tidak saling eksklusif disebut *klasifikasi multi-label*.
+Masalah pemberian tag otomatis biasanya paling baik dijelaskan
+sebagai masalah klasifikasi multi-label.
+Pikirkan tentang tag yang mungkin diterapkan orang pada tulisan di blog teknis,
+mis., "pembelajaran mesin", "teknologi", "gadget",
+"bahasa pemrograman", "Linux", "komputasi awan", "AWS".
+Artikel biasa mungkin menerapkan 5--10 tag
+karena konsep-konsep ini saling berhubungan.
+Postingan tentang "komputasi awan" cenderung menyebut "AWS"
+dan postingan tentang "pembelajaran mesin" juga bisa berhubungan
+dengan "bahasa pemrograman".
+
+Kami juga harus menghadapi masalah seperti ini saat menangani 
+literatur biomedis, di mana pemberian tag artikel dengan benar itu penting
+karena memungkinkan peneliti untuk melakukan tinjauan pustaka yang mendalam.
+Di *National Library of Medicine*, sejumlah anotator profesional
+membahas setiap artikel yang diindeks di *PubMed*
+untuk mengaitkannya dengan istilah yang relevan dari *MeSH*,
+kumpulan sekitar 28.000 tag.
+Ini adalah proses yang memakan waktu dan
+annotator biasanya memiliki jeda satu tahun antara pengarsipan dan pemberian tag.
+Pembelajaran mesin dapat digunakan di sini untuk memberikan tag sementara
+hingga setiap artikel memiliki tinjauan manual yang tepat.
+Memang, selama beberapa tahun, organisasi *BioASQ*
+telah [menyelenggarakan kompetisi](http://bioasq.org/) untuk melakukan hal ini dengan tepat.
+
+
