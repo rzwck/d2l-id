@@ -398,9 +398,9 @@ Kami akan terus merujuk
 konsep kami yang disebutkan di atas
 seperti data, model, dan teknik pelatihan.
 
-### Pembelajaran Terbimbing *Supervised Learning*
+### Pembelajaran Terawasi *Supervised Learning*
 
-*Pembelajaran terbimbing* membahas tugas
+*Pembelajaran terawasi* membahas tugas
 memprediksi label dari masukan berupa fitur.
 Setiap pasangan fitur - label disebut sebagai contoh.
 Terkadang, jika konteksnya jelas, kami mungkin menggunakan istilah *contoh*
@@ -802,4 +802,110 @@ yang kemudian dianggap lebih baik (karena pembelian lebih banyak)
 dan hal ini mendorong barang ini menjadi lebih sering lagi direkomendasikan.
 Banyak dari masalah tentang cara menangani penyensoran,
 insentif, dan siklus umpan balik, adalah pertanyaan penelitian terbuka yang penting.
+
+#### Pembelajaran Berurutan (*Sequence Learning*)
+
+Sejauh ini, kita telah melihat masalah yang memiliki
+sejumlah input tetap dan menghasilkan sejumlah output tetap.
+Sebagai contoh,
+kita telah melihat masalah prediksi harga rumah dari serangkaian fitur tetap: ukuran luas, jumlah kamar tidur,
+jumlah kamar mandi, waktu berjalan kaki ke pusat kota.
+Kita juga membahas pemetaan dari gambar (dimensi tetap)
+ke prediksi probabilitas bahwa gambar tersebut termasuk dalam setiap kelas dari sejumlah kelas yang tetap, atau mengambil ID pengguna dan ID produk,
+dan memprediksi peringkat bintang. Dalam kasus-kasus ini,
+setelah kita memberi masukan dengan panjang tetap 
+ke dalam model untuk menghasilkan keluaran,
+model langsung melupakan apa yang baru saja dilihatnya.
+
+Ini mungkin baik-baik saja jika semua masukan kita benar-benar memiliki dimensi yang sama
+dan jika masukan-masukan yang berurutan benar-benar tidak ada hubungannya satu sama lain.
+Tapi bagaimana kita menangani cuplikan video?
+Dalam kasus ini, setiap cuplikan mungkin terdiri dari jumlah *frame* yang berbeda.
+Dan tebakan kita tentang apa yang terjadi di setiap *frame* mungkin lebih kuat
+jika kita juga memperhitungkan *frame* sebelumnya atau *frame* berikutnya.
+Hal yang sama berlaku untuk bahasa. Satu masalah *deep learning* yang populer
+adalah terjemahan mesin: yaitu tugas menerima kalimat
+dalam beberapa bahasa sumber dan memprediksi terjemahannya dalam bahasa lain.
+
+Masalah ini juga terjadi dalam dunia kedokteran.
+Kita mungkin menginginkan model untuk memantau pasien di unit perawatan intensif
+dan untuk menyalakan peringatan jika resiko kematian 
+dalam 24 jam ke depan melebihi beberapa ambang batas.
+Kita pasti tidak ingin model ini membuang
+semua yang diketahuinya tentang riwayat pasien setiap jam
+dan hanya membuat prediksi berdasarkan pengukuran terbaru saja.
+
+Masalah ini adalah salah satu aplikasi pembelajaran mesin yang paling menarik
+dan itu adalah contoh dari *pembelajaran berurutan*.
+Masalah ini membutuhkan model yang dapat mengolah urutan input
+atau menghasilkan urutan keluaran (atau keduanya).
+Secara khusus,
+*Pembelajaran urutan ke urutan* (*sequence to sequence learning*) mempertimbangkan masalah
+di mana input dan output keduanya adalah urutan dengan panjang bervariasi,
+seperti terjemahan mesin dan mentranskripsikan teks dari ucapan yang diucapkan.
+Meskipun kita tidak mungkin untuk membahas semua jenis transformasi urutan,
+kasus khusus berikut ini layak untuk disebutkan.
+
+**Pemberian Tag dan Parsing**. Masalah ini melibatkan penambahan urutan teks dengan anotasi atribut.
+Dengan kata lain jumlah input dan output pada dasarnya sama.
+Misalnya, kita mungkin ingin tahu di mana letak kata kerja dan subjeknya.
+Alternatifnya, kita mungkin ingin mengetahui kata mana yang merupakan entitas bernama (*named entities*).
+Secara umum, tujuannya adalah untuk menguraikan dan membuat anotasi teks berdasarkan struktur
+dan asumsi tata bahasa untuk mendapatkan suatu anotasi.
+Ini terdengar lebih rumit dari yang sebenarnya.
+Di bawah ini adalah contoh yang sangat sederhana dalam membuat anotasi kalimat
+dengan tag yang menunjukkan kata mana yang merujuk ke entitas bernama (diberi tag sebagai "Ent").
+
+```text
+Tom makan malam di Washington bersama Sally
+Ent  -      -   -      Ent       -     Ent
+```
+
+**Pengenalan Ucapan Otomatis**. Dalam pengenalan suara, urutan inputnya
+adalah rekaman audio dari speaker (ditunjukkan dalam :numref:`fig_speech`), dan keluarannya
+adalah transkrip teks dari apa yang dikatakan pembicara.
+Tantangannya adalah ada lebih banyak *frame* audio
+(suara biasanya diambil sampelnya pada 8kHz atau 16kHz)
+daripada teks, yaitu, tidak ada korespondensi 1:1 antara audio dan teks,
+karena ada ribuan sampel yang mungkin
+sesuai dengan satu kata yang diucapkan.
+Ini adalah masalah pembelajaran *urutan ke urutan* dimana output jauh lebih pendek daripada input.
+
+
+![`-D-e-e-p- L-ea-r-ni-ng-` in an audio recording.](../img/speech.png)
+:width:`700px`
+:label:`fig_speech`
+
+**Teks ke Ucapan (*Text to Speech*)**. Ini adalah kebalikan dari pengenalan ucapan otomatis.
+Dengan kata lain, inputnya adalah teks
+dan hasilnya adalah file audio.
+Dalam hal ini, keluarannya jauh lebih panjang daripada masukannya.
+Meskipun mudah bagi manusia untuk mengenali file audio yang buruk,
+ini tidak terlalu mudah untuk komputer.
+
+**Mesin Penerjemah**. Berbeda dengan kasus pengenalan suara, dimana sesuai
+input dan output terjadi dalam urutan yang sama (setelah penyelarasan),
+dalam terjemahan mesin, pembalikan urutan bisa menjadi penting.
+Dengan kata lain, walaupun kita masih mengubah satu urutan menjadi urutan lainnya,
+namun jumlah input dan output maupun urutannya tidak bisa diasumsikan sama.
+Perhatikan contoh ilustrasi berikut
+dari kecenderungan khas orang Jerman
+untuk menempatkan kata kerja di akhir kalimat.
+
+```text
+German:           Haben Sie sich schon dieses grossartige Lehrwerk angeschaut?
+English:          Did you already check out this excellent tutorial?
+Wrong alignment:  Did you yourself already this excellent tutorial looked-at?
+```
+
+Banyak masalah terkait muncul dalam tugas pembelajaran lainnya.
+Misalnya, menentukan urutan pengguna
+membaca halaman web adalah masalah analisis dua dimensi.
+Masalah-masalah dialog menunjukkan segala macam komplikasi tambahan,
+di mana menentukan apa yang harus diucapkan selanjutnya membutuhkan pertimbangan
+pengetahuan dunia nyata dan keadaan percakapan sebelumnya
+melintasi jarak waktu yang jauh.
+Masalah-masalah ini merupakan bidang penelitian yang aktif.
+
+### Pembelajaran tidak Terawasi (*Unsupervised Learning*)
 
