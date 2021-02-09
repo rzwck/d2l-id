@@ -1216,7 +1216,7 @@ dalam industri dan ilmu alam.
 Pengaruh kedua untuk pembelajaran mesin berasal dari teori informasi oleh
 [Claude Shannon (1916--2001)](https://en.wikipedia.org/wiki/Claude_Shannon) dan teori komputasi oleh [Alan Turing (1912--1954)](https://en.wikipedia.org/wiki/Alan_Turing).
 Turing mengajukan pertanyaan "dapatkah mesin berpikir?"
-dalam makalahnya yang terkenal *Computing Machinery and Intelligence* :mengutip:`Turing.1950`.
+dalam makalahnya yang terkenal *Computing Machinery and Intelligence* :cite:`Turing.1950`.
 Dalam apa yang dia gambarkan sebagai tes Turing, sebuah mesin
 dapat dianggap *cerdas* jika sulit
 bagi manusia untuk membedakan antara balasan
@@ -1301,10 +1301,10 @@ Akibatnya, area terbaik dalam pembelajaran mesin dan statistik
 bergeser dari model linier (tergeneralisasi) dan metode kernel ke jaringan neural mendalam (*deep neural network*).
 Ini juga salah satu alasan mengapa banyak teknik yang menjadi andalan
 pembelajaran mendalam, seperti perceptrons multilayer
-: cite: `McCulloch.Pitts.1943`, jaringan saraf konvolusional
-: cite: `LeCun.Bottou.Bengio.ea.1998`, memori jangka pendek
-: cite: `Hochreiter.Schmidhuber.1997`,
-dan Q-Learning: cite: `Watkins.Dayan.1992`,
+:cite:`McCulloch.Pitts.1943`, jaringan saraf konvolusional
+:cite:`LeCun.Bottou.Bengio.ea.1998`, memori jangka pendek
+:cite:`Hochreiter.Schmidhuber.1997`,
+dan Q-Learning :cite:`Watkins.Dayan.1992`,
 pada dasarnya "ditemukan kembali" dalam dekade terakhir,
 setelah terbaring relatif tidak aktif dalam waktu yang cukup lama.
 
@@ -1548,21 +1548,26 @@ pembelajaran mesin tradisional tertatih-tatih.
 Ternyata model dengan banyak lapis seperti ini 
 mampu menangani data persepsi tingkat rendah
 dengan cara yang tidak bisa dilakukan alat sebelumnya.
-Kesamaan yang paling signifikan dalam metode-metode pembelajaran mendalam adalah penggunaan *end-to-end training*.
-Artinya, daripada merakit sistem berdasarkan komponen yang disetel secara individual, seseorang bisa membangun sistem dan kemudian menyetel kinerjanya secara bersama-sama.
-Misalnya, dalam visi komputer, para ilmuwan biasa memisahkan proses *rekayasa fitur* dari proses pembuatan model pembelajaran mesin. Detektor tepi Canny :cite:`Canny.1987` dan ekstraktor fitur SIFT Lowe :cite:`Lowe.2004` berkuasa selama lebih dari satu dekade sebagai algoritma untuk memetakan gambar ke dalam vektor fitur.
+Kesamaan yang paling signifikan dalam metode-metode pembelajaran mendalam adalah 
+penggunaan *end-to-end training*.
+Artinya, daripada merakit sistem berdasarkan komponen yang disetel secara individual, 
+seseorang bisa membangun sistem dan kemudian menyetel kinerjanya secara bersama-sama.
+Misalnya, dalam visi komputer, para ilmuwan biasa memisahkan proses *rekayasa fitur* 
+dari proses pembuatan model pembelajaran mesin. Detektor tepi Canny :cite:`Canny.1987` 
+dan ekstraktor fitur SIFT Lowe :cite:`Lowe.2004` berkuasa selama lebih dari satu dekade
+sebagai algoritma untuk memetakan gambar ke dalam vektor fitur.
 Di masa lalu, bagian penting dari penerapan pembelajaran mesin untuk masalah ini
 terdiri dari cara-cara yang direkayasa secara manual
 untuk mengubah data menjadi beberapa bentuk yang dapat digunakan untuk model dangkal.
-Sayangnya, tidak banyak yang dapat dicapai dengan kecerdikan manusia dibandingkan dengan evaluasi yang konsisten atas jutaan pilihan yang dilakukan secara otomatis oleh algoritma.
+Sayangnya, tidak banyak yang dapat dicapai dengan kecerdikan manusia dibandingkan 
+dengan evaluasi yang konsisten atas jutaan pilihan yang dilakukan secara otomatis oleh algoritma.
 Saat pembelajaran mendalam mengambil alih,
-ekstraktor fitur ini diganti dengan filter yang disetel secara otomatis, menghasilkan akurasi yang unggul.
+ekstraktor fitur ini diganti dengan filter yang disetel secara otomatis, 
+menghasilkan akurasi yang unggul.
 
-Jadi,
-Salah satu keuntungan utama dari pembelajaran mendalam adalah bahwa ia menggantikan bukan
-hanya model dangkal di akhir *pipeline* pembelajaran tradisional,
-tetapi juga proses padat karya
-rekayasa fitur.
+Jadi, salah satu keuntungan utama dari pembelajaran mendalam adalah bahwa ia 
+menggantikan bukan hanya model dangkal di akhir *pipeline* pembelajaran tradisional,
+tetapi juga proses padat karya rekayasa fitur.
 Selain itu, dengan mengganti banyak pra-pemrosesan khusus domain,
 pembelajaran mendalam telah menghilangkan banyak sekat 
 yang sebelumnya memisahkan visi komputer, pengenalan suara,
@@ -1570,12 +1575,30 @@ pemrosesan bahasa alami, informatika medis, dan bidang lainnya,
 menawarkan seperangkat alat terpadu untuk menangani berbagai masalah.
 
 Di luar *end-to-end training*,
-kita mengalami transisi dari deskripsi statistik parametrik ke model nonparametrik sepenuhnya. Ketika data langka, seseorang perlu mengandalkan asumsi yang menyederhanakan realitas untuk mendapatkan model yang berguna. Ketika data melimpah, ini dapat diganti dengan model nonparametrik yang lebih sesuai dengan realitas. Sampai batas tertentu, ini mirip dengan kemajuan yang dialami fisika di pertengahan abad sebelumnya dengan ketersediaan komputer. Daripada menyelesaikan pendekatan parametrik tentang bagaimana elektron berperilaku secara manual, sekarang kita dapat menggunakan simulasi numerik dari persamaan diferensial parsial. Hal ini menghasilkan model yang jauh lebih akurat, meskipun sering kali mengorbankan kemampuan menjelaskan (*explainability*).
+kita mengalami transisi dari deskripsi statistik parametrik ke model nonparametrik 
+sepenuhnya. Ketika data langka, seseorang perlu mengandalkan asumsi yang menyederhanakan 
+realitas untuk mendapatkan model yang berguna. Ketika data melimpah, ini dapat diganti 
+dengan model nonparametrik yang lebih sesuai dengan realitas. Sampai batas tertentu, ini 
+mirip dengan kemajuan yang dialami fisika di pertengahan abad sebelumnya dengan 
+ketersediaan komputer. Daripada menyelesaikan pendekatan parametrik tentang bagaimana 
+elektron berperilaku secara manual, sekarang kita dapat menggunakan simulasi numerik 
+dari persamaan diferensial parsial. Hal ini menghasilkan model yang jauh lebih 
+akurat, meskipun sering kali mengorbankan kemudahan menjelaskan (*explainability*).
 
-Perbedaan lain dari karya sebelumnya adalah penerimaan solusi suboptimal, menangani masalah optimasi nonlinier nonconvex, dan kemauan untuk mencoba sesuatu sebelum membuktikannya. Empirisme yang baru ini dalam menangani masalah statistik, dikombinasikan dengan masuknya bakat dengan cepat, telah menyebabkan kemajuan pesat dari algoritma praktis, meskipun dalam banyak kasus mengorbankan pengubahan dan penemuan kembali alat yang sudah ada selama beberapa dekade.
+Perbedaan lain dari karya sebelumnya adalah penerimaan solusi suboptimal, 
+menangani masalah optimasi nonlinier nonconvex, dan kemauan untuk mencoba 
+sesuatu sebelum membuktikannya. Empirisme yang baru ini dalam menangani 
+masalah statistik, dikombinasikan dengan masuknya bakat dengan cepat, 
+telah menyebabkan kemajuan pesat dari algoritma praktis, meskipun dalam 
+banyak kasus mengorbankan pengubahan dan penemuan kembali alat yang sudah ada selama beberapa dekade.
 
-Pada akhirnya, komunitas deep learning bangga dapat berbagi alat melintasi batas akademis dan perusahaan, merilis banyak kode pustaka, model statistik, dan jaringan terlatih yang sangat baik sebagai sumber terbuka.
-Dalam semangat inilah *notebook* yang membentuk buku ini tersedia secara gratis untuk didistribusikan dan digunakan. Kami telah bekerja keras untuk menurunkan hambatan akses bagi semua orang untuk belajar tentang pembelajaran mendalam dan kami berharap pembaca kami akan mendapatkan manfaat dari ini.
+Pada akhirnya, komunitas deep learning bangga dapat berbagi alat 
+melintasi batas akademis dan perusahaan, merilis banyak kode pustaka, 
+model statistik, dan jaringan terlatih yang sangat baik sebagai sumber terbuka.
+Dalam semangat inilah *notebook* yang membentuk buku ini tersedia secara 
+gratis untuk didistribusikan dan digunakan. Kami telah bekerja keras untuk
+menurunkan hambatan akses bagi semua orang untuk belajar tentang pembelajaran 
+mendalam dan kami berharap pembaca kami akan mendapatkan manfaat dari ini.
 
 
 ## Ringkasan
