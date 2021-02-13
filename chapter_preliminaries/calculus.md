@@ -15,7 +15,7 @@ Faktanya, metode *exhaustion* asal muasal dari *kalkulus integral* (akan dijelas
 Lebih dari 2.000 tahun kemudian,
 cabang kalkulus lainnya, *kalkulus diferensial*,
 ditemukan.
-Di antara aplikasi paling kritis dari kalkulus diferensial, yaitu 
+Di antara aplikasi paling penting dari kalkulus diferensial, yaitu 
 masalah optimasi, menghitung bagaimana melakukan sesuatu dengan cara *yang optimal*.
 Seperti yang dibahas di :numref:`subsec_norms_and_objectives`,
 masalah seperti itu ada di mana-mana dalam pembelajaran mendalam.
@@ -184,3 +184,138 @@ def use_svg_display():  #@save
     """Memakai format svg untuk menampilkan plot di Jupyter."""
     display.set_matplotlib_formats('svg')
 ```
+
+Kita mendefinisikan fungsi `set_figsize` untuk menentukan ukuran gambar. Perhatikan di sini kita menggunakan `d2l.plt` secara langsung karena pernyataan import  `from matplotlib import pyplot as plt` telah ditandai untuk disimpan di paket `d2l` sebelumnya.
+
+```{.python .input}
+#@tab all
+def set_figsize(figsize=(3.5, 2.5)):  #@save
+    """Set the figure size for matplotlib."""
+    use_svg_display()
+    d2l.plt.rcParams['figure.figsize'] = figsize
+```
+
+Fungsi `set_axes` berikut ini mengatur properti sumbu dari gambar yang dihasilkan oleh `matplotlib`.
+
+```{.python .input}
+#@tab all
+#@save
+def set_axes(axes, xlabel, ylabel, xlim, ylim, xscale, yscale, legend):
+    """Atur properti sumbu untuk matplotlib."""
+    axes.set_xlabel(xlabel)
+    axes.set_ylabel(ylabel)
+    axes.set_xscale(xscale)
+    axes.set_yscale(yscale)
+    axes.set_xlim(xlim)
+    axes.set_ylim(ylim)
+    if legend:
+        axes.legend(legend)
+    axes.grid()
+```
+
+Dengan tiga fungsi ini, kita sekarang bisa mendefinisikan fungsi `plot` untuk 
+menggambarkan banyak kurva dengan singkat karena kita akan perlu memvisualisasikan 
+banyak kurva di sepanjang buku ini.
+
+```{.python .input}
+#@tab all
+#@save
+def plot(X, Y=None, xlabel=None, ylabel=None, legend=None, xlim=None,
+         ylim=None, xscale='linear', yscale='linear',
+         fmts=('-', 'm--', 'g-.', 'r:'), figsize=(3.5, 2.5), axes=None):
+    """Plot titik data."""
+    if legend is None:
+        legend = []
+
+    set_figsize(figsize)
+    axes = axes if axes else d2l.plt.gca()
+
+    # Kembalikan nilai True jika `X` (tensor atau list) memiliki 1 sumbu
+    def has_one_axis(X):
+        return (hasattr(X, "ndim") and X.ndim == 1 or isinstance(X, list)
+                and not hasattr(X[0], "__len__"))
+
+    if has_one_axis(X):
+        X = [X]
+    if Y is None:
+        X, Y = [[]] * len(X), X
+    elif has_one_axis(Y):
+        Y = [Y]
+    if len(X) != len(Y):
+        X = X * len(Y)
+    axes.cla()
+    for x, y, fmt in zip(X, Y, fmts):
+        if len(x):
+            axes.plot(x, y, fmt)
+        else:
+            axes.plot(y, fmt)
+    set_axes(axes, xlabel, ylabel, xlim, ylim, xscale, yscale, legend)
+```
+
+Sekarang kita bisa [**memplot fungsi $u = f(x)$ dan garis singgungnya $y = 2x - 3$ at $x=1$**], di mana koefisien $2$ adalah kemiringan dari garis singgung.
+
+```{.python .input}
+#@tab all
+x = np.arange(0, 3, 0.1)
+plot(x, [f(x), 2 * x - 3], 'x', 'f(x)', legend=['f(x)', 'Garis singgung (x=1)'])
+```
+
+## Turunan Parsial
+
+Sejauh ini kita telah membahas diferensiasi fungsi dengan hanya satu variabel.
+Dalam pembelajaran mendalam, fungsi seringkali memiliki banyak variabel.
+Jadi kita perlu memperluas konsep diferensiasi untuk fungsi multi-variabel.
+
+Misalkan $y = f(x_1, x_2, \ldots, x_n)$ adalah fungsi dengan $n$ variabel. Turunan parsial dari $y$ terhadap parameter ke-$i$, $x_i$ adalah
+
+$$ \frac{\partial y}{\partial x_i} = \lim_{h \rightarrow 0} \frac{f(x_1, \ldots, x_{i-1}, x_i+h, x_{i+1}, \ldots, x_n) - f(x_1, \ldots, x_i, \ldots, x_n)}{h}.$$
+
+Untuk menghitung $\frac{\partial y}{\partial x_i}$, kita bisa memperlakukan $x_1, \ldots, x_{i-1}, x_{i+1}, \ldots, x_n$ sebagai konstanta dan menghitung turunan $y$ terhadap $x_i$.
+Untuk notasi turunan parsial, berikut ini adalah e
+For notation of partial derivatives, semua bentuk di bawah ini adalah ekuivalen:
+
+$$\frac{\partial y}{\partial x_i} = \frac{\partial f}{\partial x_i} = f_{x_i} = f_i = D_i f = D_{x_i} f.$$
+
+## Gradien
+
+Kita dapat menggabungkan turunan parsial dari fungsi multi variabel terhadap semua variabelnya untuk mendapatkan vektor gradien dari fungsi tersebut.
+Misal input dari fungsi $f: \mathbb{R}^n \rightarrow \mathbb{R}$ adalah vektor $n$-dimensi, $\mathbf{x} = [x_1, x_2, \ldots, x_n]^\top$ dan outputnya adalah skalar. Gradien dari fungsi $f(\mathbf{x})$ terhadap $\mathbf{x}$ adalah vektor dari $n$ turunan parsial:
+
+$$\nabla_{\mathbf{x}} f(\mathbf{x}) = \bigg[\frac{\partial f(\mathbf{x})}{\partial x_1}, \frac{\partial f(\mathbf{x})}{\partial x_2}, \ldots, \frac{\partial f(\mathbf{x})}{\partial x_n}\bigg]^\top,$$
+
+di mana $\nabla_{\mathbf{x}} f(\mathbf{x})$ seringkali diganti oleh $\nabla f(\mathbf{x})$ ketika tidak ada ambiguitas.
+
+Misalkan $\mathbf{x}$ adalah vektor $n$-dimensi, aturan di bawah ini sering dipakai untuk menurunkan fungsi multi variabel:
+
+* Untuk semua $\mathbf{A} \in \mathbb{R}^{m \times n}$, $\nabla_{\mathbf{x}} \mathbf{A} \mathbf{x} = \mathbf{A}^\top$,
+* Untuk semua  $\mathbf{A} \in \mathbb{R}^{n \times m}$, $\nabla_{\mathbf{x}} \mathbf{x}^\top \mathbf{A}  = \mathbf{A}$,
+* Untuk semua  $\mathbf{A} \in \mathbb{R}^{n \times n}$, $\nabla_{\mathbf{x}} \mathbf{x}^\top \mathbf{A} \mathbf{x}  = (\mathbf{A} + \mathbf{A}^\top)\mathbf{x}$,
+* $\nabla_{\mathbf{x}} \|\mathbf{x} \|^2 = \nabla_{\mathbf{x}} \mathbf{x}^\top \mathbf{x} = 2\mathbf{x}$.
+
+Demikian pula, untuk sembarang matrix $\mathbf{X}$, kita punya $\nabla_{\mathbf{X}} \|\mathbf{X} \|_F^2 = 2\mathbf{X}$. Seperti yang akan kita lihat nanti, gradien sangat berguna untuk mendesain algoritma optimasi dalam pembelajaran mendalam.
+
+
+## Aturan Rantai
+
+However, such gradients can be hard to find.
+This is because multivariate functions in deep learning are often *composite*,
+so we may not apply any of the aforementioned rules to differentiate these functions.
+Fortunately, the *chain rule* enables us to differentiate composite functions.
+
+Let us first consider functions of a single variable.
+Suppose that functions $y=f(u)$ and $u=g(x)$ are both differentiable, then the chain rule states that
+
+$$\frac{dy}{dx} = \frac{dy}{du} \frac{du}{dx}.$$
+
+Now let us turn our attention to a more general scenario
+where functions have an arbitrary number of variables.
+Suppose that the differentiable function $y$ has variables
+$u_1, u_2, \ldots, u_m$, where each differentiable function $u_i$
+has variables $x_1, x_2, \ldots, x_n$.
+Note that $y$ is a function of $x_1, x_2, \ldots, x_n$.
+Then the chain rule gives
+
+$$\frac{dy}{dx_i} = \frac{dy}{du_1} \frac{du_1}{dx_i} + \frac{dy}{du_2} \frac{du_2}{dx_i} + \cdots + \frac{dy}{du_m} \frac{du_m}{dx_i}$$
+
+for any $i = 1, 2, \ldots, n$.
+
