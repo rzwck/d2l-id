@@ -297,25 +297,53 @@ Demikian pula, untuk sembarang matrix $\mathbf{X}$, kita punya $\nabla_{\mathbf{
 
 ## Aturan Rantai
 
-However, such gradients can be hard to find.
-This is because multivariate functions in deep learning are often *composite*,
-so we may not apply any of the aforementioned rules to differentiate these functions.
-Fortunately, the *chain rule* enables us to differentiate composite functions.
+Namun, gradien seperti itu sulit dicari.
+Hal ini karena fungsi multi variabel dalam pembelajaran mesin seringkali adalah fungsi komposit,
+jadi kita mungkin tidak bisa menerapkan aturan-aturan di atas untuk menurunkan fungsi tersebut.
+Untungnya, ada aturan rantai yang memungkinkan kita untuk menurunkan fungsi komposit.
 
-Let us first consider functions of a single variable.
-Suppose that functions $y=f(u)$ and $u=g(x)$ are both differentiable, then the chain rule states that
+Mari kita pertama-tama melihat fungsi satu variabel.
+Misalkan fungsi $y=f(u)$ dan $u=g(x)$ adalah fungsi diferensiabel, maka aturan rantai menyatakan bahwa 
 
 $$\frac{dy}{dx} = \frac{dy}{du} \frac{du}{dx}.$$
 
-Now let us turn our attention to a more general scenario
-where functions have an arbitrary number of variables.
-Suppose that the differentiable function $y$ has variables
-$u_1, u_2, \ldots, u_m$, where each differentiable function $u_i$
-has variables $x_1, x_2, \ldots, x_n$.
-Note that $y$ is a function of $x_1, x_2, \ldots, x_n$.
-Then the chain rule gives
+Sekarang mari kita perhatikan skenario yang lebih umum
+di mana fungsi memiliki sembarang jumlah variabel.
+Misalkan fungsi diferensiabel $y$ mempunyai variabel 
+$u_1, u_2, \ldots, u_m$, di mana setiap fungsi diferensiabel $u_i$
+memiliki variabel $x_1, x_2, \ldots, x_n$.
+Perhatikan bahwa $y$ adalah fungsi dari $x_1, x_2, \ldots, x_n$.
+Maka aturan rantai menghasilkan
 
 $$\frac{dy}{dx_i} = \frac{dy}{du_1} \frac{du_1}{dx_i} + \frac{dy}{du_2} \frac{du_2}{dx_i} + \cdots + \frac{dy}{du_m} \frac{du_m}{dx_i}$$
 
-for any $i = 1, 2, \ldots, n$.
+untuk sembarang $i = 1, 2, \ldots, n$.
 
+
+## Ringkasan
+
+* Kalkulus diferensial dan kalkulus integral adalah dua cabang kalkulus, di mana diferensial dapat diterapkan pada banyak sekali
+masalah optimasi dalam pembelajaran mendalam.
+* Turunan dapat diartikan sebagai tingkat perubahan seketika dari sebuah fungsi terhadap variabelnya. Turunan juga merupakan kemiringan dari
+garis singgung terhadap kurva fungsi.
+* Gradien adalah vektor yang komponennya adalah turunan parsial dari fungsi multi variabel terhadap semua variabelnya.
+* Aturan rantai memungkinkan kita untuk menurunkan fungsi komposit.
+
+## Latihan
+
+1. Plot fungsi $y = f(x) = x^3 - \frac{1}{x}$ dan garis singgungnya di titik $x = 1$.
+1. Temukan gradien dari fungsi $f(\mathbf{x}) = 3x_1^2 + 5e^{x_2}$.
+1. Apakah gradien dari fungsi $f(\mathbf{x}) = \|\mathbf{x}\|_2$?
+1. Dapatkan kamu menuliskan aturan rantai untuk kasus di mana$u = f(x, y, z)$ dan $x = x(a, b)$, $y = y(a, b)$, and $z = z(a, b)$?
+
+:begin_tab:`mxnet`
+[Diskusi](https://discuss.d2l.ai/t/32)
+:end_tab:
+
+:begin_tab:`pytorch`
+[Diskusi](https://discuss.d2l.ai/t/33)
+:end_tab:
+
+:begin_tab:`tensorflow`
+[Diskusi](https://discuss.d2l.ai/t/197)
+:end_tab:
