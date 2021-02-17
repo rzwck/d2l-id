@@ -866,21 +866,21 @@ tf.matmul(A, B)
 
 Perkalian matriks-matriks juga bisa disebut dengan *perkalian matriks*, dan seharusnya tidak akan disalahmengertikan dengan perkalian Hadamard.
 
-## Norm
+## Norma
 :label:`subsec_lin-algebra-norms`
 
-Beberapa operator yang paling berguna dalam aljabar linier adalah norm.
-Secara informal, norm vektor memberitahukan besar sebuah vektor.
+Beberapa operator yang paling berguna dalam aljabar linier adalah norma.
+Secara informal, norma vektor memberitahukan besar sebuah vektor.
 Arti dari *ukuran* yang dimaksud disini tidak berarti dimensi, tapi 
 yang dimaksud adalah besarnya nilai dari komponen-komponennya.
 
-Dalam aljabar linier, norm vektor adalah fungsi $f$ yang memetakan vektor
+Dalam aljabar linier, norma vektor adalah fungsi $f$ yang memetakan vektor
 ke nilai skalar yang memnuhi beberapa properti.
 Diberikan sembarang vektor $\mathbf{x}$,
 properti pertama mengatakan
 bahwa jika kita menskalakan semua elemen dari vektor 
 dengan suatu faktor konstanta $\alpha$,
-norm vektor tersebut juga akan terskalakan dengan *nilai mutlak*
+norma vektor tersebut juga akan terskalakan dengan *nilai mutlak*
 dari faktor konstanta yang sama:
 
 $$f(\alpha \mathbf{x}) = |\alpha| f(\mathbf{x}).$$
@@ -891,14 +891,167 @@ Properti kedua adalah berkenaan dengan ketidaksamaan segitiga:
 $$f(\mathbf{x} + \mathbf{y}) \leq f(\mathbf{x}) + f(\mathbf{y}).$$
 
 
-Properti ketiga mengatakan bahwa nilai norm harus non-negatif: 
+Properti ketiga mengatakan bahwa nilai norma harus non-negatif: 
 
 $$f(\mathbf{x}) \geq 0.$$
 
 Hal ini masuk akal, karena dalam hampir semua konteks, *ukuran* terkecil dari sesuatu adalah 0.
-Properti terakhir mensyaratkan bahwa norm terkecil dicapai dan hanya mungkin dicapai
+Properti terakhir mensyaratkan bahwa norma terkecil dicapai dan hanya mungkin dicapai
 dengan vektor yang semua elemennya adalah nol.
 
 $$\forall i, [\mathbf{x}]_i = 0 \Leftrightarrow f(\mathbf{x})=0.$$
 
+
+Anda mungkin memperhatikan bahwa norma sangat mirip dengan ukuran jarak.
+Dan jika Anda mengingat jarak Euclidean
+(pikirkan teorema Pythagoras) dari sekolah dasar,
+maka konsep non-negativitas dan ketidaksamaan segitiga mungkin terdengar akrab.
+Memang faktanya, jarak Euclidean sebenarnya adalah norm:
+khususnya itu adalah norm $L_2$.
+Misalkan elemen dalam vektor berdimensi $n$
+$\mathbf{x}$ adalah $x_1, \ldots, x_n$.
+
+[**Norma $L_2$ dari $\mathbf{x}$ adalah akar kuadrat dari jumlah kuadrat semua elemennya:**]
+
+(**$$\|\mathbf{x}\|_2 = \sqrt{\sum_{i=1}^n x_i^2},$$**)
+
+subskrip $2$ seringkali tidak dipakai dalam norma $L_2$, yaitu, $\|\mathbf{x}\|$ ekuivalen dengan $\|\mathbf{x}\|_2$. Dalam kode,
+kita bisa menghitung norma $L_2$ sebuah vektor sebagai berikut.
+
+```{.python .input}
+u = np.array([3, -4])
+np.linalg.norm(u)
+```
+
+```{.python .input}
+#@tab pytorch
+u = torch.tensor([3.0, -4.0])
+torch.norm(u)
+```
+
+```{.python .input}
+#@tab tensorflow
+u = tf.constant([3.0, -4.0])
+tf.norm(u)
+```
+
+Dalam pembelajaran mendalam kita lebih sering bekerja
+dengan kuadrat dari norma $L_2$.
+
+Anda juga akan sering melihat [**norma $L_1$**] vektor,
+yang diekspresikan sebagai jumlah dari nilai mutlak elemen-elemennya:
+
+(**$$\|\mathbf{x}\|_1 = \sum_{i=1}^n \left|x_i \right|.$$**)
+
+Dibandingkan dengan norma $L_2$,
+norma $L_1$ ini lebih sedikit terpengaruh oleh *outlier*.
+Untuk menghitung norma $L_1$, kita menyusun fungsi nilai mutlak `abs`
+dengan fungsi jumlah `sum` semua elemennya.
+
+```{.python .input}
+np.abs(u).sum()
+```
+
+```{.python .input}
+#@tab pytorch
+torch.abs(u).sum()
+```
+
+```{.python .input}
+#@tab tensorflow
+tf.reduce_sum(tf.abs(u))
+```
+
+Kedua norma $L_2$ dan $L_1$ adalah kasus khusus dari norma umum $L_p$:
+
+$$\|\mathbf{x}\|_p = \left(\sum_{i=1}^n \left|x_i \right|^p \right)^{1/p}.$$
+
+Analog dengan norma $L_2$ vektor, 
+[**Norma Frobenius sebuah matriks $\mathbf{X} \in \mathbb{R}^{m \times n}$**]
+adalah akar kuadrat dari jumlah kuadrat elemen-elemen matriks:
+
+[**$$\|\mathbf{X}\|_F = \sqrt{\sum_{i=1}^m \sum_{j=1}^n x_{ij}^2}.$$**]
+
+Norma Frobenius memenuhi semua properti dari norma vektor.
+Norma ini berperilaku seolah-olah ini adalah norma $L_2$ dari vektor berbentuk matriks.
+Memanggil fungsi berikut akan menghitung norma Frobenius dari matriks.
+
+```{.python .input}
+np.linalg.norm(np.ones((4, 9)))
+```
+
+```{.python .input}
+#@tab pytorch
+torch.norm(torch.ones((4, 9)))
+```
+
+```{.python .input}
+#@tab tensorflow
+tf.norm(tf.ones((4, 9)))
+```
+
+### Norma dan Objektif
+:label:`subsec_norms_and_objectives`
+
+Meskipun kita tidak ingin membahas ini terlalu dini, 
+kita dapat menanamkan beberapa intuisi tentang mengapa konsep-konsep ini berguna.
+Dalam pembelajaran mendalam, kita sering mencoba menyelesaikan masalah optimasi:
+*memaksimalkan* probabilitas yang ditetapkan ke data yang diamati;
+*minimalkan* jarak antar prediksi
+dan nilai observasi yang sebenarnya.
+Menetapkan representasi vektor ke obyek (seperti kata, produk, atau artikel berita)
+sedemikian rupa sehingga jarak antara obyek serupa diminimalkan,
+dan jarak antara obyek yang berbeda dimaksimalkan.
+Seringkali, fungsi objektif, mungkin komponen yang paling penting dari 
+algoritma pembelajaran mendalam (selain datanya),
+diekspresikan sebagai norma.
+
+## Lebih lanjut tentang Aljabar Linear
+
+Di bagian ini saja,
+kami telah mengajari Anda semua aljabar linier
+yang Anda perlukan untuk memahami sebagian besar pembelajaran mendalam modern.
+Ada lebih banyak aljabar linier
+dan matematika yang berguna untuk pembelajaran mesin.
+Misalnya, matriks dapat didekomposisi menjadi faktor-faktor,
+dan dekomposisi ini dapat mengungkap
+struktur berdimensi rendah dalam dataset dunia nyata.
+Ada seluruh subbidang pembelajaran mesin
+yang berfokus pada penggunaan dekomposisi matriks
+dan generalisasinya untuk tensor orde tinggi
+untuk menemukan struktur dalam dataset dan memecahkan masalah prediksi.
+Tetapi buku ini berfokus pada pembelajaran mendalam.
+Dan kami yakin Anda akan terdorong untuk mempelajari lebih banyak matematika
+setelah anda mencoba langsung menerapkan model pembelajaran mesin yang berguna pada dataset nyata.
+Jadi, meskipun kami akan memperkenalkan lebih banyak matematika nanti,
+kami akan menyelesaikan bagian ini di sini.
+
+Jika Anda ingin mempelajari lebih lanjut tentang aljabar linier,
+Anda bisa merujuk ke 
+[lampiran online tentang operasi aljabar linier](https://d2l.ai/chapter_appendix-mathematics-for-deep-learning/geometry-linear-algebraic-ops.html)
+atau sumber bagus lainnya :cite:`Strang.1993, Kolter.2008, Petersen.Pedersen.ea.2008`.
+
+
+## Ringkasan
+
+* Skalar, vektor, matriks, dan tensor adalah objek matematika dasar dalam aljabar linier.
+* Vektor menggeneralisasi skalar, dan matriks menggeneralisasi vektor.
+* Skalar, vektor, matriks, dan tensor masing-masing memiliki nol, satu, dua, dan sejumlah sumbu.
+* Tensor dapat direduksi sepanjang sumbu tertentu dengan `sum` dan` mean`.
+* Perkalian per elemen dari dua matriks disebut perkalian Hadamard. Ini berbeda dengan perkalian matriks.
+* Dalam pembelajaran mendalam, kita sering bekerja dengan norma seperti norma $L_1$, norma $L_2$, dan norma Frobenius.
+* Kita dapat melakukan berbagai operasi pada skalar, vektor, matriks, dan tensor.
+
+## Exercises
+
+1. Buktikan bahwa transpose dari transpose dari matriks $\mathbf{A}$ adalah: $(\mathbf{A}^\top)^\top = \mathbf{A}$.
+1. Diberikan dua matriks $\mathbf{A}$ dan $\mathbf{B}$, tunjukkan bahwa jumlah dua transpose sama dengan transpose dari jumlah: $\mathbf{A}^\top + \mathbf{B}^\top = (\mathbf{A} + \mathbf{B})^\top$.
+1. Diberikan sembarang matriks persegi $\mathbf{A}$, apakah $\mathbf{A} + \mathbf{A}^\top$ selalu simetris? Mengapa?
+1. Kita mendefinisikan tensor `X` berbentuk (2, 3, 4) di bagian ini. Apakah keluaran dari `len(X)` ?
+1. Untuk tensor `X` berbentuk sembarang, apakah `len(X)` selalu berhubungan dengan panjang suatu sumbu dari `X`? Apakah sumbu itu?
+1. Jalankan `A / A.sum(axis=1)` dan lihat apa yang terjadi. Dapatkah Anda menganalisa alasannya?
+1. Ketika berkunjung 
+1. When berjalan antara dua titik di Manhattan, apakah jarak yang perlu anda lalui dalam koordinat, yaitu, dalam hal jalan? Dapatkah Anda berjalan secara diagonal?
+1. Perhatikan tensor dengan bentuk (2, 3, 4). Apakah bentuk dari keluaran penjummlahan sepanjang sumbu 0, 1, dan 2?
+1. Berikan sebuah tensor dengan 3 atau lebih sumbu ke fungsi `linalg.norm` dan perhatikan keluarannya. Apakah yang dihitung oleh fungsi ini untuk tensor berbentuk sembarang?
 
