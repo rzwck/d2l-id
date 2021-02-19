@@ -171,10 +171,10 @@ show_images(X, 2, 9, titles=get_fashion_mnist_labels(y));
 ## Membaca Tumpukan Mini (*Minibatch*)
 
 Untuk membuat hidup kita lebih mudah ketika membaca dataset pelatihan dan tes,
-kita akan menggunakan *iterator* data bawaan daripada membuat dari awal.
+kita akan menggunakan pengulang (*iterator*) data bawaan daripada membuat dari awal.
 Ingat bawah pada setiap iterasi, pemuat data (*data loader*) 
 [**membaca sebuah tumpukan mini data dengan ukuran `batch_size` setiap waktu.**]
-Kita juga mengacak contoh-contoh untuk iterator data pelatihan.
+Kita juga mengacak contoh-contoh untuk pengulang data pelatihan.
 
 ```{.python .input}
 batch_size = 256
@@ -223,14 +223,9 @@ f'{timer.stop():.2f} sec'
 
 ## Menggabungkan Semuanya
 
-Now we define [**the `load_data_fashion_mnist` function
-that obtains and reads the Fashion-MNIST dataset.**]
-It returns the data iterators for both the training set and validation set.
-In addition, it accepts an optional argument to resize images to another shape.
-
 Sekarang kita mendefinisikan [**fungsi `load_data_fashion_mnist` yang mendapatkan dan 
 membaca dataset Fashion-MNIST.**]
-Fungsi ini mengembalikan iterator data untuk data pelatihan dan data validasi.
+Fungsi ini mengembalikan pengulang data untuk data pelatihan dan data validasi.
 Selain itu, fungsi ini menerima argumen opsional untuk mengubah ukuran gambar ke bentuk lain.
 
 ```{.python .input}
@@ -304,12 +299,12 @@ Kita sekarang siap untuk bekerja dengan dataset Fashion-MNIST di bab-bab selanju
 * Fashion_MNIST adalah dataset klasifikasi pakaian mengandung gambar-gambar dari 10 kategori. Kita akan menggunakan dataset ini dalam bab-bab selanjutnya untuk
 mengevaluasi berbagai algoritma klasifikasi.
 * Kita menyimpan bentuk dari sembarang gambar dengan tinggi $h$ dan lebar $w$ piksel sebagai $h \times w$ or ($h$, $w$).
-* Iterator data adalah komponen kunci untuk kinerja yang sangkil (*efficient*). Andalkan iterator data yang telah diimplementasikan dengan baik yang mengeksploitasi komputasi kinerja-tinggi agar tidak memperlambat pelatihan anda.
+* Iterator data adalah komponen kunci untuk kinerja yang sangkil (*efficient*). Andalkan pengulang data yang telah diimplementasikan dengan baik yang mengeksploitasi komputasi kinerja-tinggi agar tidak memperlambat pelatihan anda.
 
 ## Latihan
 
 1. Apakah mengurangi `batch_size` (contohnya menjadi 1) mempengaruhi kinerja pembacaan?
-1. Kinerja iterator data itu penting. Apakah anda pikir implementasi saat ini cukup cepat? Eksplorasi berbagai pilihan untuk mempercepatnya.
+1. Kinerja pengulang data itu penting. Apakah anda pikir implementasi saat ini cukup cepat? Eksplorasi berbagai pilihan untuk mempercepatnya.
 1. Lihat dokumentasi API dari kerangka kerja. Dataset apa lagi yang tersedia?
 
 :begin_tab:`mxnet`
