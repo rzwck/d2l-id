@@ -92,13 +92,6 @@ batch_size = 10
 data_iter = load_array((features, labels), batch_size)
 ```
 
-Now we can use `data_iter` in much the same way as we called
-the `data_iter` function in :numref:`sec_linear_scratch`.
-To verify that it is working, we can read and print
-the first minibatch of examples.
-Comparing with :numref:`sec_linear_scratch`,
-here we use `iter` to construct a Python iterator and use `next` to obtain the first item from the iterator.
-
 Sekarang kita bisa memakai `data_iter` dengan cara yang sama seperti 
 kita memanggil fungsi `data_iter` di :numref:`sec_linear_scratch`.
 Untuk memverifikasi bahwa ini bekerja dengan baik, kita bisa membaca dan mencetak
