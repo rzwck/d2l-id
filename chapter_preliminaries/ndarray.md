@@ -379,7 +379,7 @@ tf.reduce_sum(X)
 Pada bagian di atas, kita telah melihat bagaimana melakukan operasi per-elemen
 pada dua tensor berbentuk sama. Pada kondisi tertentu,
 meskipun bentuknya berbeda, kita masih bisa [**melakukan operasi per-elemen
-dengan memanfaatkan mekanisme penyiaran.**]
+dengan memanfaatkan mekanisme penyebaran.**]
 Mekanisme ini bekerja dengan cara berikut:
 Pertama, memperluas salah satu atau kedua senarai
 dengan menyalin elemen-elemen secara tepat sehingga
@@ -654,9 +654,9 @@ a, a.item(), float(a), int(a)
 
 ## Ringkasan
 
-* Antarmuka utama untuk menyimpan dan memanipulasi data untuk pembelajaran mendalam adalah tensor (array dimensi-$n$). Ini menyediakan berbagai fungsi termasuk operasi matematika dasar, penyiaran, pengindeksan, pemotongan, penyimpanan memori, dan konversi ke objek Python lainnya.
+* Antarmuka utama untuk menyimpan dan memanipulasi data untuk pembelajaran mendalam adalah tensor (array dimensi-$n$). Ini menyediakan berbagai fungsi termasuk operasi matematika dasar, penyebaran, pengindeksan, pemotongan, penyimpanan memori, dan konversi ke objek Python lainnya.
 
 ## Latihan
 
 1. Jalankan kode di bagian ini. Ubahlah pernyataan kondisional `X == Y` menjadi `X < Y` atau `X > Y`, dan lihat tensor apa yang anda dapatkan.
-1. Ganti dua tensor yang beroperasi per-elemen dalam mekanisme penyiaran, dengan bentuk lain, contohnya, tensor 3-dimensi. Apakah hasilnya sama seperti yang diharapkan?
+1. Ganti dua tensor yang beroperasi per-elemen dalam mekanisme penyebaran, dengan bentuk lain, contohnya, tensor 3-dimensi. Apakah hasilnya sama seperti yang diharapkan?
