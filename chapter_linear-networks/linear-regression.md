@@ -32,23 +32,6 @@ dengan beberapa derau (*noise*) pada pengamatan.
 Kedua, kita berasumsi bahwa derau berperilaku baik 
 (mengikuti distribusi Gaussian).
 
-To motivate the approach, let us start with a running example.
-Suppose that we wish to estimate the prices of houses (in dollars)
-based on their area (in square feet) and age (in years).
-To actually develop a model for predicting house prices,
-we would need to get our hands on a dataset
-consisting of sales for which we know
-the sale price, area, and age for each home.
-In the terminology of machine learning,
-the dataset is called a *training dataset* or *training set*,
-and each row (here the data corresponding to one sale)
-is called an *example* (or *data point*, *data instance*, *sample*).
-The thing we are trying to predict (price)
-is called a *label* (or *target*).
-The independent variables (age and area)
-upon which the predictions are based
-are called *features* (or *covariates*).
-
 Untuk motivasi, mari kita mulai dengan contoh.
 Misalkan kita ingin memperkirakan harga rumah (dalam dolar)
 berdasarkan luas (dalam kaki persegi) dan usia (dalam tahun).
@@ -73,9 +56,6 @@ dan labelnya sebagai $y^{(i)}$.
 ### Model Linier
 :label:`subsec_linear_model`
 
-The linearity assumption just says that the target (price)
-can be expressed as a weighted sum of the features (area and age):
-
 Asumsi linieritas hanya mengatakan bahwa target (harga)
 dapat dinyatakan sebagai jumlah tertimbang fitur-fiturnya (luas dan usia):
 
@@ -93,9 +73,8 @@ atau rumah berusia nol tahun,
 kita masih membutuhkan bias sebab bila tidak kita akan membatasi ekspresifitas
 model kita.
 Sebenarnya, :eqref:`eq_price-area` adalah transformasi *affine* fitur masukan,
-yang ditandai dengan
-a *transformasi linier* fitur melalui penjumlahan tertimbang, dikombinasikan dengan
-a *translasi* melalui bias yang ditambahkan.
+yang ditandai dengan *transformasi linier* fitur melalui penjumlahan tertimbang, dikombinasikan dengan
+*translasi* melalui bias yang ditambahkan.
 
 Diberikan dataset, tujuan kita adalah memilih
 bobot $\mathbf{w}$ dan bias $b$ sedemikian rupa sehingga secara rata-rata,
@@ -105,14 +84,6 @@ Model yang prediksi keluarannya
 ditentukan oleh transformasi *affine* dari fitur masukan
 adalah *model linier*,
 dimana transformasi *affine* ditentukan oleh bobot dan bias yang dipilih.
-
-In disciplines where it is common to focus
-on datasets with just a few features,
-explicitly expressing models long-form like this is common.
-In machine learning, we usually work with high-dimensional datasets,
-so it is more convenient to employ linear algebra notation.
-When our inputs consist of $d$ features,
-we express our prediction $\hat{y}$ (in general the "hat" symbol denotes estimates) as
 
 Dalam disiplin ilmu di mana adalah hal yang biasa untuk berfokus pada dataset dengan hanya beberapa fitur,
 mengekspresikan model secara eksplisit dalam bentuk panjang seperti ini adalah hal biasa.
@@ -167,19 +138,6 @@ dan (ii) prosedur untuk memutakhirkan model untuk meningkatkan kualitasnya.
 
 ### Fungsi Kerugian
 
-Before we start thinking about how to *fit* data with our model,
-we need to determine a measure of *fitness*.
-The *loss function* quantifies the distance
-between the *real* and *predicted* value of the target.
-The loss will usually be a non-negative number
-where smaller values are better
-and perfect predictions incur a loss of 0.
-The most popular loss function in regression problems
-is the squared error.
-When our prediction for an example $i$ is $\hat{y}^{(i)}$
-and the corresponding true label is $y^{(i)}$,
-the squared error is given by:
-
 Sebelum kita mulai memikirkan tentang cara *menyesuaikan* (*fitting*) data dengan model kita,
 kita perlu menentukan ukuran *kesesuaian* (*fitness*).
 *Fungsi kerugian* menghitung jarak
@@ -195,7 +153,6 @@ galat kuadrat dihitung sebagai:
 
 $$l^{(i)}(\mathbf{w}, b) = \frac{1}{2} \left(\hat{y}^{(i)} - y^{(i)}\right)^2.$$
 
-
 Konstanta $\frac{1}{2}$ tidak membuat perbedaan nyata
 tapi akan terbukti memudahkan notasi,
 konstanta ini akan habis saat kita mengambil turunan dari kerugian.
@@ -207,14 +164,6 @@ seperti yang ditunjukkan di: numref: `fig_fit_linreg`.
 
 ![Menyesuaikan data dengan model linier.](../img/fit-linreg.svg)
 :label:`fig_fit_linreg`
-
-Note that large differences between
-estimates $\hat{y}^{(i)}$ and observations $y^{(i)}$
-lead to even larger contributions to the loss,
-due to the quadratic dependence.
-To measure the quality of a model on the entire dataset of $n$ examples,
-we simply average (or equivalently, sum)
-the losses on the training set.
 
 Perhatikan bahwa perbedaan besar antara
 estimasi $\hat{y}^{(i)}$ dan pengamatan $y^{(i)}$
@@ -231,4 +180,200 @@ yang meminimalkan total kerugian dari seluruh sampel pelatihan:
 
 $$\mathbf{w}^*, b^* = \operatorname*{argmin}_{\mathbf{w}, b}\  L(\mathbf{w}, b).$$
 
+
+
+### Solusi Analitik
+
+Regresi linier adalah masalah optimasi yang sangat sederhana.
+Tidak seperti kebanyakan model lain yang akan kita temui di buku ini,
+regresi linier dapat diselesaikan secara analitik dengan menerapkan rumus sederhana.
+Untuk memulai, kita bisa memasukkan bias $b$ ke dalam parameter $\mathbf{w}$
+dengan menambahkan kolom yang semua berisi angka 1 ke matriks desain.
+Kemudian soal prediksi kita adalah meminimalkan $\|\mathbf{y} - \mathbf{X}\mathbf{w}\|^2$.
+Hanya ada satu titik kritis di fungsi kerugian 
+dan titik itu adalah titik dengan kerugian minimum di seluruh domain.
+Mengambil turunan dari fungsi kerugian terhadap $\mathbf{w}$
+dan mengaturnya sama dengan nol menghasilkan solusi analitik (bentuk tertutup):
+
+$$\mathbf{w}^* = (\mathbf X^\top \mathbf X)^{-1}\mathbf X^\top \mathbf{y}.$$
+
+
+Meskipun masalah sederhana seperti regresi linier
+dapat diselesaikan dengan solusi analitik,
+jangan terbiasa dengan keberuntungan seperti itu.
+Meskipun solusi analitik memungkinkan analisis matematika yang bagus,
+persyaratan solusi analitik sangat membatasi 
+sehingga tidak memungkinkan dalam pembelajaran mendalam.
+
+### Penurunan Gradien Stokastik Minibatch (*Minibatch Stochastic Gradient Descent*)
+
+Bahkan dalam kasus di mana kita tidak dapat menyelesaikan model secara analitis,
+ternyata dalam praktiknya kita masih bisa melatihnya secara mangkus (efektif).
+Selain itu, untuk banyak tugas, model-model yang sulit dioptimalkan tersebut
+ternyata berkinerja jauh lebih baik sehingga usaha untuk mencari tahu cara melatihnya 
+menjadi sangat sepadan.
+
+Kunci teknik untuk mengoptimalkan hampir semua model pembelajaran mendalam,
+termasuk model-model yang dicakup dalam buku ini,
+adalah secara berulang-ulang mengurangi galat dengan memutakhirkan 
+parameter-parameter ke arah yang mengurangi fungsi kerugian secara bertahap.
+Algoritma ini disebut dengan penurunan gradien (*gradient descent*).
+
+Di setiap iterasi, kita pertama mengambil satu *minibatch* sampel $\mathcal{B}$
+terdiri dari sejumlah tetap contoh pelatihan.
+Kita kemudian menghitung turunan (gradien) dari kerugian rata-rata terhadap parameter model 
+dari *minibatch* tersebut.
+Terakhir, kita mengalikan gradien dengan suatu nilai positif tertentu $\eta$ 
+dan hasilnya akan mengurangi nilai parameter saat ini.
+
+Kita dapat mengekspresikan pemutakhiran secara matematis sebagai berikut:
+($\partial$ menunjukkan turunan parsial):
+
+$$(\mathbf{w},b) \leftarrow (\mathbf{w},b) - \frac{\eta}{|\mathcal{B}|} \sum_{i \in \mathcal{B}} \partial_{(\mathbf{w},b)} l^{(i)}(\mathbf{w},b).$$
+
+Ringkasnya, langkah-langkah dari algoritma ini adalah:
+(i) kita menginisialisasi parameter model, biasanya secara acak;
+(ii) secara berulang-ulang, mengambil *minibatch* sampel secara acak dari data,
+memutakhirkan parameter ke arah negatif dari gradien.
+Untuk kerugian kuadrat dan transformasi *affine* kita bisa 
+menuliskan ini secara eksplisit sebagai berikut:
+
+$$\begin{aligned} \mathbf{w} &\leftarrow \mathbf{w} -   \frac{\eta}{|\mathcal{B}|} \sum_{i \in \mathcal{B}} \partial_{\mathbf{w}} l^{(i)}(\mathbf{w}, b) = \mathbf{w} - \frac{\eta}{|\mathcal{B}|} \sum_{i \in \mathcal{B}} \mathbf{x}^{(i)} \left(\mathbf{w}^\top \mathbf{x}^{(i)} + b - y^{(i)}\right),\\ b &\leftarrow b -  \frac{\eta}{|\mathcal{B}|} \sum_{i \in \mathcal{B}} \partial_b l^{(i)}(\mathbf{w}, b)  = b - \frac{\eta}{|\mathcal{B}|} \sum_{i \in \mathcal{B}} \left(\mathbf{w}^\top \mathbf{x}^{(i)} + b - y^{(i)}\right). \end{aligned}$$
+:eqlabel:`eq_linreg_batch_update`
+
+Perhatikan bahwa $\mathbf{w}$ dan $\mathbf{x}$ adalah vektor dalam :eqref:`eq_linreg_batch_update`.
+Di sini, notasi vektor yang lebih elegan membuat matematikanya menjadi lebih mudah dibaca
+daripada mengekspresikannya dalah bentuk koefisien,
+seperti $w_1, w_2, \ldots, w_d$.
+Himpunan kardinalitas $|\mathcal{B}|$ merepresentasikan 
+banyaknya jumlah sampel di setiap *minibatch* (ukuran *batch*)
+dan $\eta$ menunjukkan laju pembelajaran (*learning rate*).
+Kami menekankan bahwa nilai dari ukuran *batch* dan laju pembelajaran
+ditentukan secara manual dan bukan dipelajari melalui pelatihan model.
+Parameter-parameter ini yang bisa diubah namun tidak dimutakhirkan
+dalam proses pelatihan disebut dengan hiperparameter.
+Penyetelan hiperparameter adalah proses untuk menentukan hiperparameter,
+dan biasanya memerlukan penyesuaian berdasarkan hasil dari pelatihan 
+yang dinilai berdasarkan dataset terpisah yang disebut dataset validasi (*validation set*).
+
+Setelah melalui beberapa iterasi pelatihan (atau memenuhi suatu kriteria perhentian tertentu),
+kita mencatat estimasi parameter model,
+ditunjukkan dengan $\hat{\mathbf{w}}, \hat{b}$.
+Perhatikan bahkan bila fungsi kita benar-benar linier dan tanpa gangguan derau,
+parameter-parameter ini tidak akan bisa menjadi benar-benar tepat sebagai 
+*minimizer* kerugian, karena walaupun algoritma ini perlahan-lahan mengerucut ke 
+*minimizer*, dia tidak bisa mencapainya dalam jumlah langkah yang terbatas.
+
+Regresi linear adalah masalah pembelajaran di mana hanya ada satu titik minimum 
+di antara seluruh domain.
+Namun, untuk model yang lebih kompleks, seperti jaringan mendalam (*deep networks*), 
+permukaan fungsi kerugian mengandung banyak titik *minima*.
+Untungnya, untuk suatu alasan yang belum dimengerti saat ini, 
+praktisi pembelajaran mendalam jarang mengalami masalah untuk menemukan parameter
+yang meminimalkan kerugian pada dataset pelatihan.
+
+Tantangan yang lebih sulit adalah untuk menemukan parameter yang menghasilkan
+kerugian rendah pada data yang belum pernah dilihat sebelumnya, sebuah tantangan
+yang disebut dengan generalisasi. Kita akan selalu menemukan topik ini di sepanjang buku ini.
+
+### Membuat Prediksi dari Model yang Dipelajari
+
+Diberikan model regresi liner yang dipelajari 
+$\hat{\mathbf{w}}^\top \mathbf{x} + \hat{b}$,
+kita sekarang bisa mengestimasi harga rumah baru 
+(tidak ada dalam dataset pelatihan)
+berdasarkan luasnya $x_1$ dan usianya $x_2$.
+Memperkirakan target berdasarkan figur-fiturnya 
+biasa disebut juga dengan membuat prediksi atau inferensi.
+
+Kita akan menggunakan istilah *prediksi* karena 
+menyebut langkah ini inferensi, walaupun mulai menjadi jargon
+dalam pembelajaran mendalam, kurang tepat.
+
+Dalam statitik, *inferensi* lebih sering menunjukkan
+estimasi parameter berdasarkan dataset.
+Penyalahgunaan terminologi seperti ini sering menjadi
+sumber kebingungan ketika praktisi pembelajaran mendalam
+berdiskusi dengan statistikawan.
+
+## Vektorisasi untuk Kecepatan
+
+Ketika melatih model, kita biasanya ingin memproses
+seluruh *minibatch* contoh-contoh data sekaligus,
+Melakukan ini secara efisien memerlukan (**kita**) (~~seharusnya~~) melakukan (**vektorisasi kalkulasi
+dan memanfaatkan pustaka aljabar linier yang cepat daripada menulis *for-loop* sendiri di Python.**)
+
+```{.python .input}
+%matplotlib inline
+from d2l import mxnet as d2l
+import math
+from mxnet import np
+import time
+```
+
+```{.python .input}
+#@tab pytorch
+%matplotlib inline
+from d2l import torch as d2l
+import math
+import torch
+import numpy as np
+import time
+```
+
+```{.python .input}
+#@tab tensorflow
+%matplotlib inline
+from d2l import tensorflow as d2l
+import math
+import tensorflow as tf
+import numpy as np
+import time
+```
+
+Untuk mengilustrasikan mengapa hal ini sangat penting,
+kita bisa (**melihat contoh dua metode untuk menjumlahkan vektor.**)
+Untuk memulai kita menginstansiasi dua vektor 10000-dimensi
+berisi semua angka satu.
+Dalam satu metode kita akan melakukan perulangan atas kedua vektor dengan Python for-loop.
+Dalam metode lainnya kita akan mengandalkan satu panggilan ke `+`.
+
+```{.python .input}
+#@tab all
+n = 10000
+a = d2l.ones(n)
+b = d2l.ones(n)
+```
+Karena kita akan sering membuat *benchmark* berdasarkan waktu di buku ini,
+[**mari kita definisikan sebuah *timer***].
+
+```{.python .input}
+#@tab all
+class Timer:  #@save
+    """Record multiple running times."""
+    def __init__(self):
+        self.times = []
+        self.start()
+
+    def start(self):
+        """Start the timer."""
+        self.tik = time.time()
+
+    def stop(self):
+        """Stop the timer and record the time in a list."""
+        self.times.append(time.time() - self.tik)
+        return self.times[-1]
+
+    def avg(self):
+        """Return the average time."""
+        return sum(self.times) / len(self.times)
+
+    def sum(self):
+        """Return the sum of time."""
+        return sum(self.times)
+
+    def cumsum(self):
+        """Return the accumulated time."""
+        return np.array(self.times).cumsum().tolist()
+```
 
