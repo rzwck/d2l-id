@@ -377,3 +377,257 @@ class Timer:  #@save
         return np.array(self.times).cumsum().tolist()
 ```
 
+Sekarang kita bisa mengambil benchmark beban kerjanya.
+Pertama, [**kita tambahkan, satu koordinat satu waktu, 
+menggunakan for-loop.**]
+
+```{.python .input}
+#@tab mxnet, pytorch
+c = d2l.zeros(n)
+timer = Timer()
+for i in range(n):
+    c[i] = a[i] + b[i]
+f'{timer.stop():.5f} sec'
+```
+
+```{.python .input}
+#@tab tensorflow
+c = tf.Variable(d2l.zeros(n))
+timer = Timer()
+for i in range(n):
+    c[i].assign(a[i] + b[i])
+f'{timer.stop():.5f} sec'
+```
+
+(**Cara lainnya, kita mengandalkan operator `+` untuk menghitung penjumlahan per-elemen.**)
+
+```{.python .input}
+#@tab all
+timer.start()
+d = a + b
+f'{timer.stop():.5f} sec'
+```
+
+Mungkin Anda menyadari bahwa metode kedua
+secara dramatis jauh lebih cepat dari metode pertama.
+Vektorisasi seringkali menghasilkan percepatan berlipat-lipat.
+Selain itu, kita mendorong lebih banyak operasi matematika ke pustaka
+dan tidak perlu memprogram sendiri banyak kalkulasi,
+mengurangi potensi kesalahan.
+
+## Distribusi Normal dan Kerugian Kuadrat
+:label:`subsec_normal_distribution_and_squared_loss`
+
+Meskipun anda sudah bisa langsung mencoba hanya dengan menggunakan informasi di atas, 
+di bagian berikut ini kita bisa lebih formal mengenalkan fungsi objektif kerugian kuadrat, 
+melalui asumsi tentang distribusi derau.
+
+Regresi linier ditemukan oleh Gauss pada tahun 1795,
+yang juga menemukan distribusi normal (juga disebut *Gaussian*).
+Ternyata hubungan antara
+distribusi normal dan regresi linier
+lebih dalam dari hubungan anak dan orang tua biasa.
+Untuk menyegarkan ingatan Anda, densitas probabilitas
+dari distribusi normal dengan rata-rata $\mu$ dan varians $\sigma^2$ (deviasi standar $\sigma$)
+diformulasikan sebagai
+
+$$p(x) = \frac{1}{\sqrt{2 \pi \sigma^2}} \exp\left(-\frac{1}{2 \sigma^2} (x - \mu)^2\right).$$
+
+Di bawah ini [**kita mendefinisikan fungsi Python untuk menghitung distribusi normal**].
+
+```{.python .input}
+#@tab all
+def normal(x, mu, sigma):
+    p = 1 / math.sqrt(2 * math.pi * sigma**2)
+    return p * np.exp(-0.5 / sigma**2 * (x - mu)**2)
+```
+
+Sekarang kita bisa (**memvisualisasikan distribusi normal**).
+
+```{.python .input}
+#@tab all
+# gunakan numpy untuk visualisasi
+x = np.arange(-7, 7, 0.01)
+
+# Pasangan rata-rata dan standar deviasi
+params = [(0, 1), (0, 2), (3, 1)]
+d2l.plot(x, [normal(x, mu, sigma) for mu, sigma in params], xlabel='x',
+         ylabel='p(x)', figsize=(4.5, 2.5),
+         legend=[f'mean {mu}, std {sigma}' for mu, sigma in params])
+```
+Seperti yang anda lihat, mengubah rata-rata berhubungan dengan pergeseran sepanjang sumbu-$x$,
+dan menaikkan varians menyebarkan distribusi ke luar, melandaikan puncaknya.
+
+Satu cara untuk memotivasi regresi linier dengan fungsi kerugian rata-rata galat kuadrat (atau sederhananya kuadrat kerugian)
+adalah untuk secara formal mengasumsikan bahwa pengamatan berasal dari pengamatan yang bercampur dengan derau, 
+di mana derau terdistribusi secara normal sebagai berikut:
+
+$$y = \mathbf{w}^\top \mathbf{x} + b + \epsilon \text{ where } \epsilon \sim \mathcal{N}(0, \sigma^2).$$
+
+Jadi, sekarang kita bisa menulis *kemungkinan* (*likelihood*) melihat 
+suatu nilai $y$ berdasarkan suatu nilai $\mathbf{x}$ sebagai 
+
+$$P(y \mid \mathbf{x}) = \frac{1}{\sqrt{2 \pi \sigma^2}} \exp\left(-\frac{1}{2 \sigma^2} (y - \mathbf{w}^\top \mathbf{x} - b)^2\right).$$
+
+Berdasarkan prinsip kemungkinan maksimum (*maximum likelihood*),
+nilai terbaik dari parameter $\mathbf{w}$ dan $b$ adalah nilai 
+yang memaksimalkan *kemungkinan* dari seluruh dataset:
+
+$$P(\mathbf y \mid \mathbf X) = \prod_{i=1}^{n} p(y^{(i)}|\mathbf{x}^{(i)}).$$
+
+Penaksir yang dipilih berdasarkan prinsip kemungkinan maksimum disebut
+dengan penaksir kemungkinan maksimum (*maximum likelihood estimator*).
+
+Meskipun, memaksimalkan perkalian dari banyak fungsi eksponensial,
+mungkin terlihat sulit,
+kita dapat menyederhanakan banyak hal secara signifikan, tanpa mengubah objektif,
+dengan memaksimalkan logaritma kemungkinan.
+Untuk alasan historis, optimasi lebih sering diekspresikan
+sebagai minimalisasi daripada maksimalisasi.
+Jadi, tanpa mengubah apa pun, kita dapat meminimalkan *negatif log kemungkinan* (*negative log-likelihood*)
+$-\log P(\mathbf y \mid \mathbf X)$.
+
+Menyelesaikan matematika di atas memberi kita:
+
+$$-\log P(\mathbf y \mid \mathbf X) = \sum_{i=1}^n \frac{1}{2} \log(2 \pi \sigma^2) + \frac{1}{2 \sigma^2} \left(y^{(i)} - \mathbf{w}^\top \mathbf{x}^{(i)} - b\right)^2.$$
+
+Sekarang kita hanya perlu satu asumsi lagi bahwa $\sigma$ adalah konstanta tetap.
+Jadi kita bisa mengabaikan suku pertama karena 
+itu tidak bergantung pada $\mathbf{w}$ atau $b$.
+Sekarang suku kedua identik dengan kerugian kesalahan kuadrat yang diperkenalkan sebelumnya,
+kecuali untuk konstanta perkalian $\frac{1}{\sigma^2}$.
+Untungnya, solusinya tidak bergantung pada $\sigma$.
+Oleh karena itu, meminimalkan galat kuadrat rata-rata
+setara dengan estimasi kemungkinan maksimum
+dari model linier dengan asumsi derau Gaussian aditif.
+
+## Dari Regresi Linier ke Jaringan Mendalam
+
+Sejauh ini kita hanya berbicara tentang model linier.
+Meskipun jaringan saraf mencakup keluarga model yang lebih kaya,
+kita bisa mulai menganggap model linier
+sebagai jaringan saraf dengan cara mengekspresikannya dalam bahasa jaringan saraf.
+Untuk memulai, mari kita mulai dengan menulis ulang sesuatu dalam notasi "lapisan".
+
+### Diagram Jaringan Saraf
+
+Praktisi pembelajaran mendalam senang menggambar diagram 
+untuk memvisualisasikan apa yang terjadi pada model mereka.
+Dalam :numref:`fig_single_neuron`,
+kami menggambarkan model regresi linier kami sebagai jaringan saraf.
+Perhatikan bahwa diagram ini menyoroti pola konektivitas
+seperti bagaimana setiap input dihubungkan ke output,
+tetapi bukan nilai yang diambil oleh bobot atau bias.
+
+![Regresi Linier sebagai jaringan saraf satu-lapis.](../img/singleneuron.svg)
+:label:`fig_single_neuron`
+
+Untuk jaringan saraf yang ditampilkan di :numref:`fig_single_neuron`,
+masukannya adalah $x_1, \ldots, x_d$,
+jadi *jumlah masukan* (atau *dimensi fitur*) dalam lapisan masukan adalah $d$.
+Keluaran jaringan di :numref:`fig_single_neuron` adalah $o_1$,
+jadi *jumlah keluaran* pada lapisan keluaran adalah 1.
+Perhatikan bahwa semua nilai masukan telah *diberikan*
+dan hanya ada satu neuron yang *dihitung*.
+Berfokus pada tempat komputasi berlangsung,
+secara konvensional kita tidak mempertimbangkan lapisan masukan saat menghitung lapisan.
+Artinya,
+*jumlah lapisan* untuk jaringan saraf di :numref:`fig_single_neuron` adalah 1.
+Kita dapat menganggap model regresi linier sebagai jaringan saraf
+yang hanya terdiri dari satu neuron buatan,
+atau sebagai jaringan saraf satu-lapis.
+
+Karena untuk regresi linier, setiap masukan terhubung 
+ke setiap keluaran (dalam hal ini hanya ada satu keluaran),
+kita dapat menganggap transformasi ini (lapisan keluaran di :numref:`fig_single_neuron`)
+sebagai *lapisan terhubung-penuh terhubung* atau *lapisan padat*.
+Kita akan berbicara lebih banyak tentang jaringan yang terdiri dari lapisan seperti itu
+di bab selanjutnya.
+
+
+### Biologi
+
+Karena regresi linier (ditemukan tahun 1795)
+mendahului ilmu saraf komputasi,
+mungkin tampak bertentangan dengan menjelaskan 
+regresi linier sebagai jaringan saraf.
+Untuk melihat mengapa model linier adalah tempat yang alami untuk memulai 
+ketika ahli sibernetika / neurofisiologi
+Warren McCulloch dan Walter Pitts mulai mengembangkan 
+model neuron buatan,
+perhatikan gambar dari neuron biologis di :numref:`fig_Neuron`, terdiri dari
+*dendrit* (terminal masukan),
+*nukleus* (CPU), *akson* (kabel keluaran),
+dan *terminal akson* (terminal keluaran),
+mengaktifkan koneksi ke neuron lain melalui *sinapsis*.
+
+![Neuron yang Sebenarnya.](../img/neuron.svg)
+:label:`fig_Neuron`
+
+Informasi $x_i$ datang dari neuron lain
+(atau sensor lingkungan seperti retina)
+diterima di dendrit.
+Secara khusus, informasi tersebut memiliki *bobot sinaptik* $w_i$ yang 
+menentukan pengaruh input
+(mis., aktivasi atau penghambatan melalui perkalian $x_i w_i$).
+Input berbobot datang dari berbagai sumber
+dijumlahkan dalam nukleus sebagai jumlah tertimbang $y = \sum_i x_i w_i + b$,
+dan informasi ini kemudian dikirim untuk diproses lebih lanjut di akson $y$,
+biasanya setelah beberapa pemrosesan nonlinier melalui $\sigma(y)$.
+Dari sana ia mencapai tujuannya (mis., Otot)
+atau dimasukkan ke neuron lain melalui dendritnya.
+
+Pastinya, ide tingkat tinggi bahwa banyak unit seperti itu
+dapat dirakit dengan konektivitas yang tepat
+dan algoritma pembelajaran yang tepat,
+untuk menghasilkan perilaku yang jauh lebih menarik dan kompleks
+daripada yang bisa diekspresikan oleh satu neuron saja
+berhutang pada studi tentang sistem saraf biologis yang nyata.
+
+Pada saat yang sama, sebagian besar penelitian dalam pembelajaran mendalam hari ini
+menarik sedikit inspirasi langsung dalam ilmu saraf.
+Kami mengutip Stuart Russell dan Peter Norvig yang,
+di buku teks AI klasik mereka
+*Artificial Intelligence: A Modern Approach* :cite:`Russell.Norvig.2016`,
+menunjukkan bahwa meskipun pesawat mungkin *terinspirasi* oleh burung,
+ilmu burung bukanlah pendorong utama
+inovasi aeronautika selama beberapa abad.
+Begitu pula inspirasi dalam deep learning hari ini
+datang dalam ukuran yang sama atau lebih besar dari matematika,
+statistik, dan ilmu komputer.
+
+
+## Ringkasan
+
+* Bahan utama dalam model pembelajaran mesin adalah data pelatihan, fungsi kerugian, algoritma optimasi, dan yang jelas, model itu sendiri.
+* Vektorisasi membuat segalanya lebih baik (kebanyakan matematika) dan lebih cepat (kebanyakan kode).
+* Meminimalkan fungsi objektif dan melakukan estimasi kemungkinan maksimum (*maximum likelihood estimation*) dapat berarti hal yang sama.
+* Model regresi linier juga merupakan model jaringan saraf.
+
+## Latihan
+
+1. Asumsikan bahwa kita punya data $x_1, \ldots, x_n \in \mathbb{R}$. Tujuan kita adalah menemukan konstanta $b$ sehingga $\sum_i (x_i - b)^2$ diminimalkan.
+    1. Temukan solusi analitik untuk nilai optimal $b$.
+    1. Bagaimana masalah ini dan solusinya berhubungan dengan distribusi normal?
+1. Turunkan solusi analitik atas masalah optimasi untuk regresi linier dengan galat kuadrat. Untuk menjaga tetap sederhana, anda boleh mengabaikan bias $b$ dalam masalah ini (kita bisa melakukan ini dengan menambahkan satu kolom ke $\mathbf X$ berisi semua satu).
+    1. Tuliskan masalah optimasi dalam notasi matriks dan vektor (perlakukan semua data sebagai satu matriks, dan semua nilai target sebagai satu vektor).
+    1. Hitung gradien dari kerugian terhadap $w$.
+    1. Temukan solusi analitik dengan menetapkan gradien sama dengan nol dan menyelesaikan persamaan matriksnya.
+    1. Kapan cara ini lebih baik daripada penurunan gradien stokastik? Kapan cara ini akan gagal?
+1. Asumsikan bahwa model derau yang mengatur derau aditif $\epsilon$ adalah distribusi eksponensial, yaitu, $p(\epsilon) = \frac{1}{2} \exp(-|\epsilon|)$.
+    1. Tuliskan negatif *log-likelihood* dari data dalam model $-\log P(\mathbf y \mid \mathbf X)$.
+    1. Dapatkah anda menemukan solusi bentuk tertutup?    
+    1. Usulkan algoritma penurunan gradien stokastik untuk menyelesaikan masalah ini. Apa yang mungkin menjadi masalah (petunjuk: apa yang terjadi di dekat titik stasioner ketika kita terus memutakhirkan parameter?) Dapatkah anda memperbaiki ini?
+
+:begin_tab:`mxnet`
+[Diskusi](https://discuss.d2l.ai/t/40)
+:end_tab:
+
+:begin_tab:`pytorch`
+[Diskusi](https://discuss.d2l.ai/t/258)
+:end_tab:
+
+:begin_tab:`tensorflow`
+[Diskusi](https://discuss.d2l.ai/t/259)
+:end_tab:
+
